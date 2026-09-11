@@ -1,0 +1,15 @@
+com/fitness/controller/LogoutServlet.class
+com/fitness/model/Perfil.class
+com/fitness/config/MysqlSingleton.class
+com/fitness/service/UsuarioService.class
+com/fitness/filter/AuthFilter.class
+com/fitness/controller/LoginServlet.class
+com/fitness/controller/PerfilServlet.class
+com/fitness/model/Usuario.class
+com/fitness/service/PerfilService.class
+com/fitness/controller/UsuarioServlet.class
+com/fitness/controller/BaseServlet.class
+com/fitness/dao/MysqlDAO.class
+com/fitness/dao/UsuarioDAO.class
+com/fitness/controller/HomeServlet.class
+com/fitness/dao/PerfilDAO.class

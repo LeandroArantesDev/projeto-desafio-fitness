@@ -95,7 +95,8 @@ INSERT INTO usuarios (id, nome, email, senha_hash, avatar_url, status, ultimo_lo
 (1, 'Carlos Silva', 'carlos.silva@email.com', '$2y$10$e8wD4t2E6R9hG3h6s...', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde', 'ativo', '2026-09-07 08:30:00'),
 (2, 'Mariana Souza', 'mariana.souza@email.com', '$2y$10$w09Zk2u8L5n1v4j8a...', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330', 'ativo', '2026-09-08 07:15:00'),
 (3, 'Rafael Mendes', 'rafael.mendes@email.com', '$2y$10$v21M9x4L8n2b3k7f9...', 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61', 'ativo', '2026-09-06 19:45:00'),
-(4, 'Beatriz Lima', 'beatriz.lima@email.com', '$2y$10$q98P2m3N4b5v6c7x8...', 'https://images.unsplash.com/photo-1580489944761-15a19d654956', 'ativo', '2026-09-08 09:00:00');
+(4, 'Beatriz Lima', 'beatriz.lima@email.com', '$2y$10$q98P2m3N4b5v6c7x8...', 'https://images.unsplash.com/photo-1580489944761-15a19d654956', 'ativo', '2026-09-08 09:00:00'),
+(5, 'Lucas Oliveira', 'lucas.oliveira@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://images.unsplash.com/photo-1599566150163-29194dcaad36', 'ativo', '2026-09-09 10:00:00');
 
 -- ===================================================
 -- 2. POVOAMENTO DA TABELA: DESAFIOS
