@@ -13,7 +13,7 @@ CREATE TABLE usuarios (
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     senha_hash VARCHAR(255) NOT NULL,
-    avatar_url VARCHAR(255) DEFAULT NULL,
+    avatar_url TEXT DEFAULT NULL,
     status ENUM('ativo', 'inativo', 'suspenso') DEFAULT 'ativo',
     ultimo_login DATETIME DEFAULT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -33,16 +33,27 @@ CREATE TABLE desafios (
     categoria ENUM('corrida', 'musculacao', 'ciclismo', 'flexoes', 'habito', 'outro') DEFAULT 'outro',
     tipo_meta ENUM('repeticoes', 'distancia_km', 'tempo_minutos', 'dias_seguidos') NOT NULL,
     meta_total DECIMAL(10, 2) NOT NULL, -- Ex: 100.00 (km), 500 (repetições)
-    unidade_medida VARCHAR(20) NOT NULL, -- Ex: 'km', 'reps', 'min'
+    unidade_medida VARCHAR(20) GENERATED ALWAYS AS (
+        CASE tipo_meta
+            WHEN 'repeticoes' THEN 'reps'
+            WHEN 'distancia_km' THEN 'km'
+            WHEN 'tempo_minutos' THEN 'min'
+            WHEN 'dias_seguidos' THEN 'dias'
+        END
+    ) STORED,
     data_inicio DATE NOT NULL,
     data_fim DATE NOT NULL,
     status ENUM('rascunho', 'ativo', 'encerrado', 'cancelado') DEFAULT 'ativo',
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
+
     CONSTRAINT fk_desafios_criador
         FOREIGN KEY (criador_id) REFERENCES usuarios(id)
-        ON DELETE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT chk_desafios_periodo
+        CHECK (data_fim > data_inicio),
+
+    INDEX idx_desafios_status_data_fim (status, data_fim)
 );
 
 -- =========================================
@@ -78,14 +89,16 @@ CREATE TABLE progresso (
     participacao_id INT NOT NULL,
     valor_registrado DECIMAL(10, 2) NOT NULL, -- Ex: correu 5.5 (km), fez 50 (flexões)
     observacao VARCHAR(255) DEFAULT NULL,
-    comprovante_url VARCHAR(255) DEFAULT NULL, -- Link de foto ou print
+    comprovante_url TEXT DEFAULT NULL, -- Link de foto ou print
     data_registro DATE NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
     CONSTRAINT fk_progresso_participacao
         FOREIGN KEY (participacao_id) REFERENCES participacoes_desafio(id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT chk_progresso_valor_positivo
+        CHECK (valor_registrado > 0)
 );
 
 -- ===================================================
@@ -101,10 +114,10 @@ INSERT INTO usuarios (id, nome, email, senha_hash, avatar_url, status, ultimo_lo
 -- ===================================================
 -- 2. POVOAMENTO DA TABELA: DESAFIOS
 -- ===================================================
-INSERT INTO desafios (id, criador_id, nome, descricao, categoria, tipo_meta, meta_total, unidade_medida, data_inicio, data_fim, status) VALUES
-(1, 1, 'Desafio 100km em Setembro', 'Correr ou caminhar um total acumulado de 100km durante o mês de setembro.', 'corrida', 'distancia_km', 100.00, 'km', '2026-09-01', '2026-09-30', 'ativo'),
-(2, 2, 'Clube das 1.000 Flexões', 'Complete mil flexões ao longo de 30 dias para fortalecer peitoral e tríceps.', 'flexoes', 'repeticoes', 1000.00, 'reps', '2026-09-01', '2026-09-30', 'ativo'),
-(3, 1, 'Pedal de Primavera', 'Pedalar pelo menos 250km até o fim do mês.', 'ciclismo', 'distancia_km', 250.00, 'km', '2026-09-05', '2026-09-30', 'ativo');
+INSERT INTO desafios (id, criador_id, nome, descricao, categoria, tipo_meta, meta_total, data_inicio, data_fim, status) VALUES
+(1, 1, 'Desafio 100km em Setembro', 'Correr ou caminhar um total acumulado de 100km durante o mês de setembro.', 'corrida', 'distancia_km', 100.00, '2026-09-01', '2026-09-30', 'ativo'),
+(2, 2, 'Clube das 1.000 Flexões', 'Complete mil flexões ao longo de 30 dias para fortalecer peitoral e tríceps.', 'flexoes', 'repeticoes', 1000.00, '2026-09-01', '2026-09-30', 'ativo'),
+(3, 1, 'Pedal de Primavera', 'Pedalar pelo menos 250km até o fim do mês.', 'ciclismo', 'distancia_km', 250.00, '2026-09-05', '2026-09-30', 'ativo');
 
 -- ===================================================
 -- 3. POVOAMENTO DA TABELA: PARTICIPACOES_DESAFIO
