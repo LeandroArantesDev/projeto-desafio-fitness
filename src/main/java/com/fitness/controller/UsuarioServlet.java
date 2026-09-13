@@ -81,9 +81,9 @@ public class UsuarioServlet extends BaseServlet {
         Usuario usuario = new Usuario();
         usuario.setId(this.paramLong(req, "id"));
         usuario.setNome(this.param(req, "nome"));
-        usuario.setLogin(this.param(req, "login"));
+        usuario.setEmail(this.param(req, "login"));
         usuario.setSenha(this.param(req, "senha"));
-        usuario.setPerfilId(this.paramLong(req, "perfilId"));
+        // usuario.setPerfilId(this.paramLong(req, "perfilId"));
         return usuario;
     }
 }

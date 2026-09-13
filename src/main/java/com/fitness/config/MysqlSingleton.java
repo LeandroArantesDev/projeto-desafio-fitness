@@ -9,9 +9,9 @@ import java.sql.SQLException;
 public class MysqlSingleton {
 
     private static final String URL =
-            "jdbc:mysql://mysql:3306/mvc_java?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-    private static final String USER = "mvc_user";
-    private static final String PASSWORD = "mvc123";
+            "jdbc:mysql://mysql:3306/projeto_desafios_fitness?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    private static final String USER = "pdf_user";
+    private static final String PASSWORD = "pdf123";
 
     private static MysqlSingleton instance;
     private Connection conexao;

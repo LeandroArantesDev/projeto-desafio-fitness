@@ -29,15 +29,15 @@ public class UsuarioService {
      * - login e senha obrigatorios
      * - so libera acesso se existir usuario com esse login/senha
      */
-    public Usuario autenticar(String login, String senha) {
-        login = this.normalizar(login);
+    public Usuario autenticar(String email, String senha) {
+        email = this.normalizar(email);
         senha = this.normalizar(senha);
 
-        if (login == null || senha == null) {
+        if (email == null || senha == null) {
             throw new IllegalArgumentException("Informe login e senha.");
         }
 
-        Usuario usuario = this.usuarioDAO.buscarPorLoginESenha(login, senha);
+        Usuario usuario = this.usuarioDAO.buscarPorLoginESenha(email, senha);
         if (usuario == null) {
             throw new IllegalArgumentException("Login ou senha invalidos.");
         }
@@ -68,7 +68,6 @@ public class UsuarioService {
         this.prepararDados(usuario);
         this.validarCamposObrigatorios(usuario);
         this.validarSenha(usuario.getSenha());
-        this.validarPerfilExistente(usuario.getPerfilId());
         this.validarLoginUnico(usuario);
 
         if (usuario.getId() == null) {
@@ -99,7 +98,7 @@ public class UsuarioService {
 
     private void prepararDados(Usuario usuario) {
         usuario.setNome(this.normalizar(usuario.getNome()));
-        usuario.setLogin(this.normalizar(usuario.getLogin()));
+        usuario.setEmail(this.normalizar(usuario.getEmail()));
         usuario.setSenha(this.normalizar(usuario.getSenha()));
     }
 
@@ -107,14 +106,11 @@ public class UsuarioService {
         if (usuario.getNome() == null) {
             throw new IllegalArgumentException("Nome e obrigatorio.");
         }
-        if (usuario.getLogin() == null) {
+        if (usuario.getEmail() == null) {
             throw new IllegalArgumentException("Login e obrigatorio.");
         }
         if (usuario.getSenha() == null) {
             throw new IllegalArgumentException("Senha e obrigatoria.");
-        }
-        if (usuario.getPerfilId() == null) {
-            throw new IllegalArgumentException("Perfil e obrigatorio.");
         }
     }
 
@@ -124,14 +120,14 @@ public class UsuarioService {
         }
     }
 
-    private void validarPerfilExistente(Long perfilId) {
-        if (this.perfilDAO.buscarPorId(perfilId) == null) {
-            throw new IllegalArgumentException("Perfil informado nao existe.");
-        }
-    }
+    // private void validarPerfilExistente(Long perfilId) {
+    //     if (this.perfilDAO.buscarPorId(perfilId) == null) {
+    //         throw new IllegalArgumentException("Perfil informado nao existe.");
+    //     }
+    // }
 
     private void validarLoginUnico(Usuario usuario) {
-        Usuario existente = this.usuarioDAO.buscarPorLogin(usuario.getLogin());
+        Usuario existente = this.usuarioDAO.buscarPorLogin(usuario.getEmail());
         if (existente == null) {
             return;
         }

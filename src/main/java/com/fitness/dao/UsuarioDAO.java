@@ -5,8 +5,11 @@ import com.fitness.model.Usuario;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * DAO = Data Access Object (acesso ao banco)
@@ -20,20 +23,56 @@ public class UsuarioDAO extends MysqlDAO {
         super();
     }
 
-    public Usuario buscarPorLoginESenha(String login, String senha) {
-        String sql =
-                "SELECT u.id, u.nome, u.login, u.senha, u.perfil_id, p.nome AS perfil_nome "
-                        + "FROM usuarios u "
-                        + "INNER JOIN perfis p ON p.id = u.perfil_id "
-                        + "WHERE u.login = ? AND u.senha = ?";
-        try (ResultSet rs = super.executar(sql, login, senha)) {
+    public Usuario buscarPorLoginESenha(String email, String senha) {
+        String sql ="SELECT id, nome, email, senha_hash, avatar_url, status, ultimo_login, criado_em, atualizado_em "
+                        + "FROM usuarios "
+                        + "WHERE email = ?";
+
+        Usuario usuario = null;
+
+        try (ResultSet rs = super.executar(sql, email)) {
             if (rs.next()) {
-                return this.mapearComPerfil(rs);
+                usuario = this.mapearUsuario(rs);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar usuario.", e);
         }
+
+        if (usuario != null && BCrypt.checkpw(senha, usuario.getSenha())) {
+            return usuario;
+        }
         return null;
+    }
+
+    public Usuario buscarPorLogin(String login) {
+        String sql =
+                "SELECT u.id, u.nome, u.login, u.senha, u.perfil_id, p.nome AS perfil_nome "
+                        + "FROM usuarios u "
+                        + "INNER JOIN perfis p ON p.id = u.perfil_id "
+                        + "WHERE u.login = ?";
+        try (ResultSet rs = super.executar(sql, login)) {
+            if (rs.next()) {
+                return this.mapearUsuario(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar por login.", e);
+        }
+        return null;
+    }
+
+    private Usuario mapearUsuario(ResultSet rs) throws SQLException {
+        Usuario usuario = new Usuario();
+        usuario.setId(rs.getLong("id"));
+        usuario.setNome(rs.getString("nome"));
+        usuario.setEmail(rs.getString("email"));
+        usuario.setSenha(rs.getString("senha_hash"));
+        usuario.setAvatar(rs.getString("avatar_url"));
+        usuario.setStatus(rs.getString("status"));
+        usuario.setUltimoLogin(rs.getObject("ultimo_login", LocalDateTime.class));
+        usuario.setCriadoEm(rs.getObject("criado_em", LocalDateTime.class));
+        usuario.setAtualizado_em(rs.getObject("atualizado_em", LocalDateTime.class));
+
+        return usuario;
     }
 
     public List<Usuario> listarTodos() {
@@ -45,7 +84,7 @@ public class UsuarioDAO extends MysqlDAO {
         List<Usuario> lista = new ArrayList<>();
         try (ResultSet rs = super.executar(sql)) {
             while (rs.next()) {
-                lista.add(this.mapearComPerfil(rs));
+                lista.add(this.mapearUsuario(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao listar usuarios.", e);
@@ -61,26 +100,10 @@ public class UsuarioDAO extends MysqlDAO {
                         + "WHERE u.id = ?";
         try (ResultSet rs = super.executar(sql, id)) {
             if (rs.next()) {
-                return this.mapearComPerfil(rs);
+                return this.mapearUsuario(rs);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar por id.", e);
-        }
-        return null;
-    }
-
-    public Usuario buscarPorLogin(String login) {
-        String sql =
-                "SELECT u.id, u.nome, u.login, u.senha, u.perfil_id, p.nome AS perfil_nome "
-                        + "FROM usuarios u "
-                        + "INNER JOIN perfis p ON p.id = u.perfil_id "
-                        + "WHERE u.login = ?";
-        try (ResultSet rs = super.executar(sql, login)) {
-            if (rs.next()) {
-                return this.mapearComPerfil(rs);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar por login.", e);
         }
         return null;
     }
@@ -103,9 +126,8 @@ public class UsuarioDAO extends MysqlDAO {
             super.executarUpdate(
                     sql,
                     usuario.getNome(),
-                    usuario.getLogin(),
-                    usuario.getSenha(),
-                    usuario.getPerfilId());
+                    usuario.getEmail(),
+                    usuario.getSenha());
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir.", e);
         }
@@ -117,9 +139,9 @@ public class UsuarioDAO extends MysqlDAO {
             super.executarUpdate(
                     sql,
                     usuario.getNome(),
-                    usuario.getLogin(),
+                    usuario.getEmail(),
                     usuario.getSenha(),
-                    usuario.getPerfilId(),
+
                     usuario.getId());
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao alterar.", e);
@@ -133,21 +155,5 @@ public class UsuarioDAO extends MysqlDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao deletar.", e);
         }
-    }
-
-    private Usuario mapearComPerfil(ResultSet rs) throws SQLException {
-        Usuario usuario = new Usuario();
-        usuario.setId(rs.getLong("id"));
-        usuario.setNome(rs.getString("nome"));
-        usuario.setLogin(rs.getString("login"));
-        usuario.setSenha(rs.getString("senha"));
-        usuario.setPerfilId(rs.getLong("perfil_id"));
-
-        Perfil perfil = new Perfil();
-        perfil.setId(rs.getLong("perfil_id"));
-        perfil.setNome(rs.getString("perfil_nome"));
-        usuario.setPerfil(perfil);
-
-        return usuario;
     }
 }
