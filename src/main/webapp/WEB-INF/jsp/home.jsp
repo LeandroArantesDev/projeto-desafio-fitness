@@ -13,7 +13,7 @@
     <div class="container">
         <strong>MVC Aula</strong>
         <nav>
-            <span>${usuarioLogado.nome} (${usuarioLogado.perfil.nome})</span>
+            <span>${usuarioLogado.nome}</span>
             <a href="${pageContext.request.contextPath}/logout">Sair</a>
         </nav>
     </div>
