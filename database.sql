@@ -90,6 +90,7 @@ CREATE TABLE progresso (
     participacao_id INT NOT NULL,
     valor_registrado DECIMAL(10, 2) NOT NULL, -- Ex: correu 5.5 (km), fez 50 (flexões)
     observacao VARCHAR(255) DEFAULT NULL,
+    comprovante_url TEXT DEFAULT NULL,
     data_registro DATE NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -107,8 +108,8 @@ CREATE TABLE progresso (
 INSERT INTO usuarios (id, nome, email, senha_hash, avatar_url, status, tipo, ultimo_login) VALUES
 (1, 'Admin', 'admin@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'admin', '2026-09-13 10:00:00'), -- senha: password
 (2, 'Teste', 'teste@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'user', '2026-09-13 10:00:00'), -- senha: password
-(3, 'Leandro', 'leandro@email.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'user', '2026-09-13 11:30:00'), -- senha: password
-(4, 'Ruan', 'ruan@email.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'user', '2026-09-13 14:15:00'); -- senha: password
+(3, 'Leandro', 'leandro@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'user', '2026-09-13 11:30:00'), -- senha: password
+(4, 'Ruan', 'ruan@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'user', '2026-09-13 14:15:00'); -- senha: password
 
 -- ===================================================
 -- 2. POVOAMENTO DA TABELA: DESAFIOS
