@@ -28,6 +28,7 @@
 <main class="container">
     <div class="page-header">
         <h1>Desafios</h1>
+        <a class="btn" href="${pageContext.request.contextPath}/desafios?acao=novo">Novo desafio</a>
     </div>
 
     <c:if test="${not empty erro}">
@@ -85,6 +86,7 @@
                         <th>Meta</th>
                         <th>Periodo</th>
                         <th>Status</th>
+                        <th>Acoes</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -96,6 +98,11 @@
                             <td>${desafio.metaTotal} ${desafio.unidadeMedida}</td>
                             <td>${desafio.dataInicio} a ${desafio.dataFim}</td>
                             <td>${desafio.status}</td>
+                            <td class="links">
+                                <a href="${pageContext.request.contextPath}/desafios?acao=editar&id=${desafio.id}">Editar</a>
+                                <a href="${pageContext.request.contextPath}/desafios?acao=excluir&id=${desafio.id}"
+                                   onclick="return confirm('Excluir este desafio?');">Excluir</a>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
