@@ -15,18 +15,19 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
 </head>
 <body>
-<header class="topbar">
-    <div class="container">
+    <header class="topbar">
+      <div class="container">
         <strong>MVC Aula</strong>
         <nav>
-            <a href="${pageContext.request.contextPath}/home">Home</a>
+          <a href="${pageContext.request.contextPath}/home">Home</a>
+          <a href="${pageContext.request.contextPath}/desafios">Meus Desafios</a>
+          <c:if test="${usuarioLogado.tipo == 'admin'}">
             <a href="${pageContext.request.contextPath}/usuarios">Usuarios</a>
-            <a href="${pageContext.request.contextPath}/desafios">Desafios</a>
-            <a href="${pageContext.request.contextPath}/perfis">Perfis</a>
-            <a href="${pageContext.request.contextPath}/logout">Sair</a>
+          </c:if>
+          <a href="${pageContext.request.contextPath}/logout">Sair</a>
         </nav>
-    </div>
-</header>
+      </div>
+    </header>
 
 <main class="container">
     <div class="page-header">

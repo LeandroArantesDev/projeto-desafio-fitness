@@ -1,7 +1,6 @@
 package com.fitness.controller;
 
 import com.fitness.model.Usuario;
-import com.fitness.service.PerfilService;
 import com.fitness.service.UsuarioService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,7 +20,6 @@ public class UsuarioServlet extends BaseServlet {
     private static final String FORM = "/WEB-INF/jsp/usuarios/form.jsp";
 
     private final UsuarioService usuarioService = new UsuarioService();
-    private final PerfilService perfilService = new PerfilService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

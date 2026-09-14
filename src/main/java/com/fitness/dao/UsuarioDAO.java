@@ -121,6 +121,10 @@ public class UsuarioDAO extends MysqlDAO {
         return 0;
     }
 
+    public void registrar(Usuario usuario) {
+        String sql = "INSERT INTO usuarios (nome, email, senha)";
+    }
+
     public void inserir(Usuario usuario) {
         String sql = "INSERT INTO usuarios (nome, login, senha, perfil_id) VALUES (?, ?, ?, ?)";
         try {

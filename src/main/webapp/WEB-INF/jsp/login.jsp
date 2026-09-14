@@ -11,7 +11,7 @@
 <body>
 <div class="login-page">
     <div class="card login-card">
-        <h1>MVC Aula</h1>
+        <h1>Login</h1>
         <p>Entre com login e senha para acessar o sistema.</p>
 
         <c:if test="${not empty erro}">
@@ -20,8 +20,8 @@
 
         <form method="post" action="${pageContext.request.contextPath}/login">
             <div class="form-group">
-                <label for="login">Login</label>
-                <input type="text" id="login" name="login" required autofocus>
+                <label for="email">E-mail</label>
+                <input type="text" id="email" name="email" required autofocus>
             </div>
             <div class="form-group">
                 <label for="senha">Senha</label>

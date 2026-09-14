@@ -16,13 +16,11 @@ taglib prefix="c" uri="jakarta.tags.core" %>
       <div class="container">
         <strong>MVC Aula</strong>
         <nav>
+          <a href="${pageContext.request.contextPath}/home">Home</a>
+          <a href="${pageContext.request.contextPath}/desafios">Meus Desafios</a>
           <c:if test="${usuarioLogado.tipo == 'admin'}">
-            <a href="${pageContext.request.contextPath}/admin">Painel Admin</a>
             <a href="${pageContext.request.contextPath}/usuarios">Usuarios</a>
           </c:if>
-          <a href="${pageContext.request.contextPath}/home">Home</a>
-          <a href="${pageContext.request.contextPath}/desafios">Desafios</a>
-          <a href="${pageContext.request.contextPath}/perfis">Perfis</a>
           <a href="${pageContext.request.contextPath}/logout">Sair</a>
         </nav>
       </div>
@@ -44,48 +42,27 @@ taglib prefix="c" uri="jakarta.tags.core" %>
           <strong>Desafios</strong>
           <span>Ver desafios que participo e que eu criei.</span>
         </a>
-        <a class="menu-card" href="${pageContext.request.contextPath}/perfis">
-          <strong>Perfis</strong>
-          <span>Listar, cadastrar, editar e excluir perfis.</span>
-        </a>
       </div>
 
       <h2>Todos os desafios</h2>
-      <div class="table-wrap">
+      <div class="grid-cards">
         <c:choose>
-            <c:when test="${empty desafios}">
-                <p class="empty">Nenhum desafio cadastrado.</p>
-            </c:when>
-            <c:otherwise>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Categoria</th>
-                        <th>Meta</th>
-                        <th>Periodo</th>
-                        <th>Status</th>
-                        <th>Acoes</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="desafio" items="${desafios}">
-                        <tr>
-                            <td>${desafio.id}</td>
-                            <td>${desafio.nome}</td>
-                            <td>${desafio.categoria}</td>
-                            <td>${desafio.metaTotal} ${desafio.unidadeMedida}</td>
-                            <td>${desafio.dataInicio} a ${desafio.dataFim}</td>
-                            <td>${desafio.status}</td>
-                            <td class="links">
-                                <a href="${pageContext.request.contextPath}/desafios?acao=participar&id=${desafio.id}">Participar</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </c:otherwise>
+          <c:when test="${empty desafios}">
+            <p class="empty">Nenhum desafio cadastrado.</p>
+          </c:when>
+          <c:otherwise>
+            <c:forEach var="desafio" items="${desafios}">
+              <c:if test="${desafio.status == 'ativo'}">
+                <article class="menu-card">
+                  <strong>${desafio.nome}</strong>
+                  <span>${desafio.categoria}</span>
+                  <span>${desafio.metaTotal} ${desafio.unidadeMedida}</span>
+                  <span>${desafio.dataInicio} a ${desafio.dataFim}</span>
+                  <a href="${pageContext.request.contextPath}/desafios?acao=participar&id=${desafio.id}">Participar</a>
+                </article>
+              </c:if>
+            </c:forEach>
+          </c:otherwise>
         </c:choose>
       </div>
     </main>

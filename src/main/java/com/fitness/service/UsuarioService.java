@@ -1,6 +1,5 @@
 package com.fitness.service;
 
-import com.fitness.dao.PerfilDAO;
 import com.fitness.dao.UsuarioDAO;
 import com.fitness.model.Usuario;
 
@@ -17,11 +16,9 @@ public class UsuarioService {
     private static final int SENHA_MINIMA = 6;
 
     private final UsuarioDAO usuarioDAO;
-    private final PerfilDAO perfilDAO;
 
     public UsuarioService() {
         this.usuarioDAO = new UsuarioDAO();
-        this.perfilDAO = new PerfilDAO();
     }
 
     /**

@@ -14,13 +14,11 @@ CREATE TABLE usuarios (
     email VARCHAR(150) NOT NULL UNIQUE,
     tipo ENUM('admin', 'user') DEFAULT 'user',
     senha_hash VARCHAR(255) NOT NULL,
-    avatar_url TEXT DEFAULT NULL,
     status ENUM('ativo', 'inativo', 'suspenso') DEFAULT 'ativo',
     ultimo_login DATETIME DEFAULT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
 
 -- =========================================
 -- TABELA DE DESAFIOS
@@ -90,7 +88,6 @@ CREATE TABLE progresso (
     participacao_id INT NOT NULL,
     valor_registrado DECIMAL(10, 2) NOT NULL, -- Ex: correu 5.5 (km), fez 50 (flexões)
     observacao VARCHAR(255) DEFAULT NULL,
-    comprovante_url TEXT DEFAULT NULL,
     data_registro DATE NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -105,11 +102,11 @@ CREATE TABLE progresso (
 -- ===================================================
 -- 1. POVOAMENTO DA TABELA: USUÁRIOS
 -- ===================================================
-INSERT INTO usuarios (id, nome, email, senha_hash, avatar_url, status, tipo, ultimo_login) VALUES
-(1, 'Admin', 'admin@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'admin', '2026-09-13 10:00:00'), -- senha: password
-(2, 'Teste', 'teste@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'user', '2026-09-13 10:00:00'), -- senha: password
-(3, 'Leandro', 'leandro@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'user', '2026-09-13 11:30:00'), -- senha: password
-(4, 'Ruan', 'ruan@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png', 'ativo', 'user', '2026-09-13 14:15:00'); -- senha: password
+INSERT INTO usuarios (id, nome, email, senha_hash, status, tipo, ultimo_login) VALUES
+(1, 'Admin', 'admin@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ativo', 'admin', '2026-09-13 10:00:00'), -- senha: password
+(2, 'Teste', 'teste@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ativo', 'user', '2026-09-13 10:00:00'), -- senha: password
+(3, 'Leandro', 'leandro@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ativo', 'user', '2026-09-13 11:30:00'), -- senha: password
+(4, 'Ruan', 'ruan@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ativo', 'user', '2026-09-13 14:15:00'); -- senha: password
 
 -- ===================================================
 -- 2. POVOAMENTO DA TABELA: DESAFIOS
@@ -123,56 +120,28 @@ INSERT INTO desafios (id, criador_id, nome, descricao, categoria, tipo_meta, met
 -- 3. POVOAMENTO DA TABELA: PARTICIPACOES_DESAFIO
 -- ===================================================
 INSERT INTO participacoes_desafio (id, usuario_id, desafio_id, status, concluido_em) VALUES
-(1, 1, 1, 'em_andamento', NULL), -- Carlos no Desafio 100km
-(2, 2, 1, 'em_andamento', NULL), -- Mariana no Desafio 100km
-(3, 3, 1, 'em_andamento', NULL), -- Rafael no Desafio 100km
-(4, 2, 2, 'em_andamento', NULL), -- Mariana no Desafio 1000 Flexões
-(5, 4, 2, 'em_andamento', NULL), -- Beatriz no Desafio 1000 Flexões
-(6, 1, 3, 'em_andamento', NULL); -- Carlos no Desafio Pedal
+(1, 1, 1, 'em_andamento', NULL), -- Admin no Desafio 100km
+(2, 2, 1, 'em_andamento', NULL), -- Teste no Desafio 100km
+(3, 3, 1, 'em_andamento', NULL), -- Leandro no Desafio 100km
+(4, 2, 2, 'em_andamento', NULL); -- Ruan no Desafio 1000 Flexões
 
 -- ===================================================
 -- 4. POVOAMENTO DA TABELA: PROGRESSO (CHECK-INS)
 -- ===================================================
-INSERT INTO progresso (participacao_id, valor_registrado, observacao, comprovante_url, data_registro) VALUES
--- Check-ins de Carlos (participacao_id 1) no Desafio 100km (Total: 17.8 km)
-(1, 6.50, 'Treino matinal no parque', 'https://storage.exemplo.com/prints/carlos_corrida_01.png', '2026-09-02'),
-(1, 5.00, 'Corrida leve na esteira', NULL, '2026-09-04'),
-(1, 6.30, 'Tiro curto e ritmo forte', 'https://storage.exemplo.com/prints/carlos_corrida_02.png', '2026-09-07'),
+INSERT INTO progresso (participacao_id, valor_registrado, observacao, data_registro) VALUES
+-- Check-ins do Admin (participacao_id 1) no Desafio 100km (Total: 17.8 km)
+(1, 6.50, 'Treino matinal no parque', '2026-09-02'),
+(1, 5.00, 'Corrida leve na esteira', '2026-09-04'),
+(1, 6.30, 'Tiro curto e ritmo forte', '2026-09-07'),
 
--- Check-ins de Mariana (participacao_id 2) no Desafio 100km (Total: 18.2 km)
-(2, 8.20, 'Longão de sábado na ciclovia', 'https://storage.exemplo.com/prints/mariana_corrida_01.png', '2026-09-05'),
-(2, 10.00, 'Treino com a assessoria', 'https://storage.exemplo.com/prints/mariana_corrida_02.png', '2026-09-07'),
+-- Check-ins do Teste (participacao_id 2) no Desafio 100km (Total: 18.2 km)
+(2, 8.20, 'Longão de sábado na ciclovia', '2026-09-05'),
+(2, 10.00, 'Treino com a assessoria', '2026-09-07'),
 
--- Check-ins de Rafael (participacao_id 3) no Desafio 100km (Total: 4.5 km)
-(3, 4.50, 'Primeiro treino pós-recuperação', NULL, '2026-09-03'),
+-- Check-ins do Leandro (participacao_id 3) no Desafio 100km (Total: 4.5 km)
+(3, 4.50, 'Primeiro treino pós-recuperação', '2026-09-03'),
 
--- Check-ins de Mariana (participacao_id 4) no Desafio 1000 Flexões (Total: 150 reps)
-(4, 50.00, '5 séries de 10 reps', NULL, '2026-09-02'),
-(4, 50.00, 'Foco em amplitude', NULL, '2026-09-04'),
-(4, 50.00, 'Última série até a falha', NULL, '2026-09-06'),
-
--- Check-ins de Beatriz (participacao_id 5) no Desafio 1000 Flexões (Total: 100 reps)
-(5, 60.00, '3 séries de 20 reps', NULL, '2026-09-03'),
-(5, 40.00, 'Treino rápido no intervalo', NULL, '2026-09-05'),
-
--- Check-ins de Carlos (participacao_id 6) no Desafio Pedal (Total: 35.0 km)
-(6, 35.00, 'Pedal de domingo estrada asfaltada', 'https://storage.exemplo.com/prints/carlos_pedal_01.png', '2026-09-06');
-
--- =========================================
--- CONSULTA DE EXEMPLO
--- =========================================
-
-SELECT 
-    u.nome AS atleta,
-    d.nome AS desafio,
-    d.meta_total,
-    d.unidade_medida,
-    COALESCE(SUM(p.valor_registrado), 0) AS total_acumulado,
-    ROUND((COALESCE(SUM(p.valor_registrado), 0) / d.meta_total) * 100, 1) AS percentual_concluido
-FROM participacoes_desafio pd
-JOIN usuarios u ON pd.usuario_id = u.id
-JOIN desafios d ON pd.desafio_id = d.id
-LEFT JOIN progresso p ON p.participacao_id = pd.id
-WHERE d.id = 1
-GROUP BY pd.id, u.nome, d.nome, d.meta_total, d.unidade_medida
-ORDER BY total_acumulado DESC;
+-- Check-ins do Ruan (participacao_id 4) no Desafio 1000 Flexões (Total: 150 reps)
+(4, 50.00, '5 séries de 10 reps', '2026-09-02'),
+(4, 50.00, 'Foco em amplitude', '2026-09-04'),
+(4, 50.00, 'Última série até a falha', '2026-09-06');
