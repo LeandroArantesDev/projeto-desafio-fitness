@@ -7,6 +7,7 @@ public class Usuario {
     private Long id;
     private String nome;
     private String email;
+    private String tipo;
     private String senha_hash;
     private String avatar_url;
     private String status;
@@ -36,6 +37,14 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String getSenha() {

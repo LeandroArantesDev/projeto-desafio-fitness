@@ -34,6 +34,20 @@ public class AuthFilter implements Filter {
             return;
         }
 
+        // Verificar a url que usuário está tentando acessar
+        String requestURI = req.getRequestURI();
+
+        // Se ele tentar acessar /usuarios ou /perfis, temos que validar se é ADMIN
+        if (requestURI.contains("/usuarios")) {
+            // Se for área de admin, mas o tipo dele for USER (ou diferente de ADMIN), bloqueia!
+            if (!"admin".equalsIgnoreCase(usuarioLogado.getTipo())) {
+                
+                // Você pode redirecionar para a home com uma mensagem de erro ou dar um erro 403
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Acesso Negado: Apenas administradores podem acessar esta área.");
+                return;
+            }
+        }
+
         chain.doFilter(request, response);
     }
 }

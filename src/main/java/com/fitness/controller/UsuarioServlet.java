@@ -73,7 +73,6 @@ public class UsuarioServlet extends BaseServlet {
         }
 
         req.setAttribute("usuario", usuario);
-        req.setAttribute("perfis", this.perfilService.listar());
         this.forward(req, resp, FORM);
     }
 
@@ -81,8 +80,8 @@ public class UsuarioServlet extends BaseServlet {
         Usuario usuario = new Usuario();
         usuario.setId(this.paramLong(req, "id"));
         usuario.setNome(this.param(req, "nome"));
-        usuario.setEmail(this.param(req, "login"));
-        usuario.setSenha(this.param(req, "senha"));
+        usuario.setEmail(this.param(req, "email"));
+        usuario.setSenha(this.param(req, "senha_hash"));
         // usuario.setPerfilId(this.paramLong(req, "perfilId"));
         return usuario;
     }
