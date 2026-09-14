@@ -21,6 +21,7 @@ taglib prefix="c" uri="jakarta.tags.core" %>
             <a href="${pageContext.request.contextPath}/usuarios">Usuarios</a>
           </c:if>
           <a href="${pageContext.request.contextPath}/home">Home</a>
+          <a href="${pageContext.request.contextPath}/desafios">Desafios</a>
           <a href="${pageContext.request.contextPath}/perfis">Perfis</a>
           <a href="${pageContext.request.contextPath}/logout">Sair</a>
         </nav>
@@ -37,12 +38,17 @@ taglib prefix="c" uri="jakarta.tags.core" %>
           <strong>Usuarios</strong>
           <span>Listar, cadastrar, editar e excluir usuarios.</span>
         </a>
+        <a class="menu-card" href="${pageContext.request.contextPath}/desafios">
+          <strong>Desafios</strong>
+          <span>Ver desafios que participo e que eu criei.</span>
+        </a>
         <a class="menu-card" href="${pageContext.request.contextPath}/perfis">
           <strong>Perfis</strong>
           <span>Listar, cadastrar, editar e excluir perfis.</span>
         </a>
       </div>
 
+      <h2>Todos os desafios</h2>
       <div class="table-wrap">
         <c:choose>
             <c:when test="${empty desafios}">
@@ -54,8 +60,10 @@ taglib prefix="c" uri="jakarta.tags.core" %>
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
-                        <th>Login</th>
-                        <th>Tipo</th>
+                        <th>Categoria</th>
+                        <th>Meta</th>
+                        <th>Periodo</th>
+                        <th>Status</th>
                         <th>Acoes</th>
                     </tr>
                     </thead>
@@ -63,13 +71,13 @@ taglib prefix="c" uri="jakarta.tags.core" %>
                     <c:forEach var="desafio" items="${desafios}">
                         <tr>
                             <td>${desafio.id}</td>
-                            <td>${desafio.descricao}</td>
                             <td>${desafio.nome}</td>
+                            <td>${desafio.categoria}</td>
+                            <td>${desafio.metaTotal} ${desafio.unidadeMedida}</td>
+                            <td>${desafio.dataInicio} a ${desafio.dataFim}</td>
                             <td>${desafio.status}</td>
                             <td class="links">
-                                <a href="${pageContext.request.contextPath}/usuarios?acao=editar&id=${usuario.id}">Editar</a>
-                                <a href="${pageContext.request.contextPath}/usuarios?acao=excluir&id=${usuario.id}"
-                                   onclick="return confirm('Excluir este usuario?');">Excluir</a>
+                                <a href="${pageContext.request.contextPath}/desafios?acao=participar&id=${desafio.id}">Participar</a>
                             </td>
                         </tr>
                     </c:forEach>

@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/home", "/usuarios", "/usuarios/*", "/perfis", "/perfis/*"})
+@WebFilter(urlPatterns = {"/home", "/usuarios", "/usuarios/*", "/perfis", "/perfis/*", "/desafios", "/desafios/*"})
 public class AuthFilter implements Filter {
 
     @Override

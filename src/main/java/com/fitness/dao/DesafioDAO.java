@@ -1,7 +1,6 @@
 package com.fitness.dao;
 
 import com.fitness.model.Desafio;
-import com.fitness.model.Usuario;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,12 +8,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 /**
  * DAO = Data Access Object (acesso ao banco)
  *
- * Somente SQL e conversao ResultSet -> {@link Usuario}.
+ * Somente SQL e conversao ResultSet -> {@link Desafio}.
  * Quem decide "quando" chamar cada metodo e o Service / Controller.
  */
 public class DesafioDAO extends MysqlDAO {
@@ -57,40 +54,52 @@ public class DesafioDAO extends MysqlDAO {
         return lista;
     }
 
-    // public void inserir(Usuario usuario) {
-    //     String sql = "INSERT INTO usuarios (nome, login, senha, perfil_id) VALUES (?, ?, ?, ?)";
-    //     try {
-    //         super.executarUpdate(
-    //                 sql,
-    //                 usuario.getNome(),
-    //                 usuario.getEmail(),
-    //                 usuario.getSenha());
-    //     } catch (SQLException e) {
-    //         throw new RuntimeException("Erro ao inserir.", e);
-    //     }
-    // }
+    public Desafio buscarPorId(Long id) {
+        String sql =
+                "SELECT id, criador_id, nome, descricao, categoria, tipo_meta, meta_total, unidade_medida, data_inicio, data_fim, status, criado_em, atualizado_em "
+                        + "FROM desafios "
+                        + "WHERE id = ?";
+        try (ResultSet rs = super.executar(sql, id)) {
+            if (rs.next()) {
+                return this.mapearDesafio(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar desafio por id.", e);
+        }
+        return null;
+    }
 
-    // public void alterar(Usuario usuario) {
-    //     String sql = "UPDATE usuarios SET nome = ?, login = ?, senha = ?, perfil_id = ? WHERE id = ?";
-    //     try {
-    //         super.executarUpdate(
-    //                 sql,
-    //                 usuario.getNome(),
-    //                 usuario.getEmail(),
-    //                 usuario.getSenha(),
+    public List<Desafio> listarPorCriador(Long criadorId) {
+        String sql =
+                "SELECT id, criador_id, nome, descricao, categoria, tipo_meta, meta_total, unidade_medida, data_inicio, data_fim, status, criado_em, atualizado_em "
+                        + "FROM desafios "
+                        + "WHERE criador_id = ?";
+        List<Desafio> lista = new ArrayList<>();
+        try (ResultSet rs = super.executar(sql, criadorId)) {
+            while (rs.next()) {
+                lista.add(this.mapearDesafio(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar desafios por criador.", e);
+        }
+        return lista;
+    }
 
-    //                 usuario.getId());
-    //     } catch (SQLException e) {
-    //         throw new RuntimeException("Erro ao alterar.", e);
-    //     }
-    // }
-
-    // public void deletar(Long id) {
-    //     String sql = "DELETE FROM usuarios WHERE id = ?";
-    //     try {
-    //         super.executarUpdate(sql, id);
-    //     } catch (SQLException e) {
-    //         throw new RuntimeException("Erro ao deletar.", e);
-    //     }
-    // }
+    public List<Desafio> listarPorParticipante(Long usuarioId) {
+        String sql =
+                "SELECT d.id, d.criador_id, d.nome, d.descricao, d.categoria, d.tipo_meta, d.meta_total, "
+                        + "d.unidade_medida, d.data_inicio, d.data_fim, d.status, d.criado_em, d.atualizado_em "
+                        + "FROM desafios d "
+                        + "INNER JOIN participacoes_desafio p ON p.desafio_id = d.id "
+                        + "WHERE p.usuario_id = ?";
+        List<Desafio> lista = new ArrayList<>();
+        try (ResultSet rs = super.executar(sql, usuarioId)) {
+            while (rs.next()) {
+                lista.add(this.mapearDesafio(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar desafios por participante.", e);
+        }
+        return lista;
+    }
 }
