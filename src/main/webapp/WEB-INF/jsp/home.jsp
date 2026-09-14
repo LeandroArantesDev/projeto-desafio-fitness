@@ -34,10 +34,12 @@ taglib prefix="c" uri="jakarta.tags.core" %>
       </div>
 
       <div class="grid-cards">
-        <a class="menu-card" href="${pageContext.request.contextPath}/usuarios">
-          <strong>Usuarios</strong>
-          <span>Listar, cadastrar, editar e excluir usuarios.</span>
-        </a>
+        <c:if test="${usuarioLogado.tipo == 'admin'}">
+          <a class="menu-card" href="${pageContext.request.contextPath}/usuarios">
+            <strong>Usuarios</strong>
+            <span>Listar, cadastrar, editar e excluir usuarios.</span>
+          </a>
+        </c:if>
         <a class="menu-card" href="${pageContext.request.contextPath}/desafios">
           <strong>Desafios</strong>
           <span>Ver desafios que participo e que eu criei.</span>
