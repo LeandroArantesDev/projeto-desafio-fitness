@@ -43,7 +43,7 @@ public class LoginServlet extends BaseServlet {
 
         try {
             Usuario usuario = this.usuarioService.autenticar(
-                    this.param(req, "login"),
+                    this.param(req, "email"),
                     this.param(req, "senha"));
 
             req.getSession(true).setAttribute("usuarioLogado", usuario);
