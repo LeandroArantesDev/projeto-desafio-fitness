@@ -49,6 +49,7 @@
                         <th>Meta</th>
                         <th>Periodo</th>
                         <th>Status</th>
+                        <th>Acoes</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -60,6 +61,9 @@
                             <td>${desafio.metaTotal} ${desafio.unidadeMedida}</td>
                             <td>${desafio.dataInicio} a ${desafio.dataFim}</td>
                             <td>${desafio.status}</td>
+                            <td class="links">
+                                <a href="${pageContext.request.contextPath}/progresso?desafioId=${desafio.id}">Registrar progresso</a>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
