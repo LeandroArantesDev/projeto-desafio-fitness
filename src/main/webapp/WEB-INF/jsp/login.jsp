@@ -30,6 +30,7 @@
             <div class="actions">
                 <button type="submit" class="btn">Entrar</button>
             </div>
+            <a href="${pageContext.request.contextPath}/register">Não tem conta? Registre-se</a>
         </form>
     </div>
 </div>

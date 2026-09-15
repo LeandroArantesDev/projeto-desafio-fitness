@@ -34,6 +34,7 @@
             <div class="actions">
                 <button type="submit" class="btn">Entrar</button>
             </div>
+            <a href="${pageContext.request.contextPath}/login">Tem conta? Faça Login</a>
         </form>
     </div>
 </div>
