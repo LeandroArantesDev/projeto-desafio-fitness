@@ -65,10 +65,10 @@
             </div>
 
             <div class="form-group">
-                <label for="perfilId">Perfil</label>
-                <select id="perfilId" name="perfilId" required>
+                <label for="tipo">Tipo</label>
+                <select id="tipo" name="tipo" required>
                     <option value="">Selecione</option>
-                    <c:forEach var="perfil" items="${perfis}">
+                    <c:forEach var="tipo" items="${perfis}">
                         <option value="${perfil.id}"
                                 <c:if test="${usuario.perfilId == perfil.id}">selected</c:if>>
                             ${perfil.nome}

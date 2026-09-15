@@ -90,13 +90,12 @@ public class UsuarioDAO extends MysqlDAO {
         return lista;
     }
 
-    public Usuario buscarPorLogin(String login) {
+    public Usuario buscarPorLogin(String email) {
         String sql =
-                "SELECT u.id, u.nome, u.login, u.senha, u.perfil_id, p.nome AS perfil_nome "
-                        + "FROM usuarios u "
-                        + "INNER JOIN perfis p ON p.id = u.perfil_id "
-                        + "WHERE u.login = ?";
-        try (ResultSet rs = super.executar(sql, login)) {
+                "SELECT id, nome, email, senha_hash, tipo"
+                        + "FROM usuarios "
+                        + "WHERE email = ?";
+        try (ResultSet rs = super.executar(sql, email)) {
             if (rs.next()) {
                 return this.mapearUsuario(rs);
             }
@@ -108,10 +107,9 @@ public class UsuarioDAO extends MysqlDAO {
 
     public Usuario buscarPorId(Long id) {
         String sql =
-                "SELECT u.id, u.nome, u.login, u.senha, u.perfil_id, p.nome AS perfil_nome "
-                        + "FROM usuarios u "
-                        + "INNER JOIN perfis p ON p.id = u.perfil_id "
-                        + "WHERE u.id = ?";
+                "SELECT id, nome, email, senha_hash, tipo"
+                        + "FROM usuarios "
+                        + "WHERE id = ?";
         try (ResultSet rs = super.executar(sql, id)) {
             if (rs.next()) {
                 return this.mapearUsuario(rs);
@@ -122,26 +120,25 @@ public class UsuarioDAO extends MysqlDAO {
         return null;
     }
 
-public boolean verificarUsuarioUnico(String email) {
-    String sql = "SELECT COUNT(*) "
+    public boolean verificarUsuarioUnico(String email) {
+        String sql = "SELECT COUNT(*) "
                + "FROM usuarios "
                + "WHERE email = ?";
                
-    try (ResultSet rs = super.executar(sql, email)) {
-        if (rs.next()) {
-            int quantidade = rs.getInt(1);
-            return quantidade == 0;
+        try (ResultSet rs = super.executar(sql, email)) {
+            if (rs.next()) {
+                int quantidade = rs.getInt(1);
+                return quantidade == 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar se usuário é único.", e);
         }
-    } catch (SQLException e) {
-        throw new RuntimeException("Erro ao verificar se usuário é único.", e);
+        return false;
     }
-    
-    return false;
-}
 
 
     public void inserir(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nome, login, senha, perfil_id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO usuarios (nome, login, senha_hash, tipo) VALUES (?, ?, ?, ?)";
         try {
             super.executarUpdate(
                     sql,
@@ -154,7 +151,7 @@ public boolean verificarUsuarioUnico(String email) {
     }
 
     public void alterar(Usuario usuario) {
-        String sql = "UPDATE usuarios SET nome = ?, login = ?, senha = ?, perfil_id = ? WHERE id = ?";
+        String sql = "UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?";
         try {
             super.executarUpdate(
                     sql,

@@ -40,7 +40,6 @@ CREATE TABLE desafios (
     ) STORED,
     data_inicio DATE NOT NULL,
     data_fim DATE NOT NULL,
-    status ENUM('rascunho', 'ativo', 'encerrado', 'cancelado') DEFAULT 'ativo',
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
