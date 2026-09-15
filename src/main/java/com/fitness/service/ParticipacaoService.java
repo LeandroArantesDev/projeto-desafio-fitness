@@ -44,4 +44,13 @@ public class ParticipacaoService {
         participacao.setDesafioId(desafioId);
         this.participacaoDAO.inserir(participacao);
     }
+
+    public Participacao buscarPorUsuarioEDesafio(Long usuarioId, Long desafioId) {
+        return this.participacaoDAO.buscarPorUsuarioEDesafio(usuarioId, desafioId);
+    }
+
+    public Participacao buscarPorId(Long id) {
+        return this.participacaoDAO.buscarPorId(id);
+    }
+
 }
