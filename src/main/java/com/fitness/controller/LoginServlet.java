@@ -42,7 +42,7 @@ public class LoginServlet extends BaseServlet {
         req.setCharacterEncoding("UTF-8");
 
         try {
-            Usuario usuario = this.usuarioService.autenticar(
+            Usuario usuario = this.usuarioService.logar(
                     this.param(req, "email"),
                     this.param(req, "senha"));
 

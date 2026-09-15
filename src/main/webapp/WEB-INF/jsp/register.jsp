@@ -19,7 +19,7 @@
             <div class="alert alert-erro">${erro}</div>
         </c:if>
 
-        <form method="post" action="${pageContext.request.contextPath}/login">
+        <form method="post" action="${pageContext.request.contextPath}/register">
             <div class="form-group">
                 <label for="nome">Nome</label>
                 <input type="text" name="nome" id="nome" required autofocus>
@@ -33,7 +33,7 @@
                 <input type="password" id="senha" name="senha" required>
             </div>
             <div class="actions">
-                <button type="submit" class="btn">Entrar</button>
+                <button type="submit" class="btn">Registrar</button>
             </div>
             <a href="${pageContext.request.contextPath}/login">Tem conta? Faça Login</a>
         </form>

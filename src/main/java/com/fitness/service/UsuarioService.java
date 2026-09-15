@@ -26,17 +26,45 @@ public class UsuarioService {
      * - login e senha obrigatorios
      * - so libera acesso se existir usuario com esse login/senha
      */
-    public Usuario autenticar(String email, String senha) {
+    public Usuario logar(String email, String senha) {
         email = this.normalizar(email);
         senha = this.normalizar(senha);
 
         if (email == null || senha == null) {
-            throw new IllegalArgumentException("Informe login e senha.");
+            throw new IllegalArgumentException("Informe e-mail e senha.");
         }
 
         Usuario usuario = this.usuarioDAO.buscarPorLoginESenha(email, senha);
         if (usuario == null) {
-            throw new IllegalArgumentException("Login ou senha invalidos.");
+            throw new IllegalArgumentException("E-mail ou senha invalidos.");
+        }
+        return usuario;
+    }
+
+    public Usuario registrar(String nome, String email, String senha) {
+        nome = this.normalizar(nome);
+        email = this.normalizar(email);
+        senha = this.normalizar(senha);
+
+        if (nome == null || email == null || senha == null) {
+            throw new IllegalArgumentException("Informe nome, e-mail e senha.");
+        }
+
+        if (!this.usuarioDAO.verificarUsuarioUnico(email)) {
+            throw new IllegalArgumentException("Já existe um usuário registrado com esse e-mail.");
+        }
+
+        if (senha.length() < 8) {
+            throw new IllegalArgumentException("A senha deve ter no mínimo 8 caracteres.");
+        }
+
+        if (!this.usuarioDAO.registrar(nome, email, senha)) {
+            throw new IllegalArgumentException("Erro ao registrar usuário.");
+        }
+
+        Usuario usuario = this.usuarioDAO.buscarPorLoginESenha(email, senha);
+        if (usuario == null) {
+            throw new IllegalArgumentException("Erro ao buscar usuário.");
         }
         return usuario;
     }
@@ -116,12 +144,6 @@ public class UsuarioService {
             throw new IllegalArgumentException("Senha deve ter no minimo " + SENHA_MINIMA + " caracteres.");
         }
     }
-
-    // private void validarPerfilExistente(Long perfilId) {
-    //     if (this.perfilDAO.buscarPorId(perfilId) == null) {
-    //         throw new IllegalArgumentException("Perfil informado nao existe.");
-    //     }
-    // }
 
     private void validarLoginUnico(Usuario usuario) {
         Usuario existente = this.usuarioDAO.buscarPorLogin(usuario.getEmail());

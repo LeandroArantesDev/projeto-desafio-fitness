@@ -22,7 +22,6 @@ public class UsuarioDAO extends MysqlDAO {
         super();
     }
 
-    // Corrigido
     public Usuario buscarPorLoginESenha(String email, String senha) {
         String sql =
                 "SELECT id, nome, email, tipo, senha_hash, status, ultimo_login, criado_em, atualizado_em "
@@ -43,6 +42,21 @@ public class UsuarioDAO extends MysqlDAO {
             return usuario;
         }
         return null;
+    }
+
+
+    public boolean registrar(String nome, String email, String senha) {
+        String sql = "INSERT INTO usuarios (nome, email, senha_hash, tipo) "
+                        + "VALUES (?, ?, ?, ?)";
+        String tipo = "user";
+        String senha_hash = BCrypt.hashpw(senha, BCrypt.gensalt());
+
+        try {
+            int linhasAfetadas = super.executarUpdate(sql, nome, email, senha_hash, tipo);
+            return linhasAfetadas > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao registrar usuário.", e);
+        }
     }
 
     private Usuario mapearUsuario(ResultSet rs) throws SQLException {
@@ -108,23 +122,23 @@ public class UsuarioDAO extends MysqlDAO {
         return null;
     }
 
-    public int contarPorPerfil(Long perfilId) {
-        String sql = "SELECT COUNT(*) AS total FROM usuarios WHERE perfil_id = ?";
-        try (ResultSet rs = super.executar(sql, perfilId)) {
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao contar usuarios por perfil.", e);
+public boolean verificarUsuarioUnico(String email) {
+    String sql = "SELECT COUNT(*) "
+               + "FROM usuarios "
+               + "WHERE email = ?";
+               
+    try (ResultSet rs = super.executar(sql, email)) {
+        if (rs.next()) {
+            int quantidade = rs.getInt(1);
+            return quantidade == 0;
         }
-        return 0;
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao verificar se usuário é único.", e);
     }
+    
+    return false;
+}
 
-    public void registrar(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nome, email, senha, tipo)"
-                        +"VALUES (?, ?, ?, ?)";
-        
-    }
 
     public void inserir(Usuario usuario) {
         String sql = "INSERT INTO usuarios (nome, login, senha, perfil_id) VALUES (?, ?, ?, ?)";

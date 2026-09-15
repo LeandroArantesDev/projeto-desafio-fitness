@@ -42,8 +42,9 @@ public class RegisterServlet extends BaseServlet {
         req.setCharacterEncoding("UTF-8");
 
         try {
-            Usuario usuario = this.usuarioService.autenticar(
-                    this.param(req, "login"),
+            Usuario usuario = this.usuarioService.registrar(
+                    this.param(req, "nome"),
+                    this.param(req, "email"),
                     this.param(req, "senha"));
 
             req.getSession(true).setAttribute("usuarioLogado", usuario);
