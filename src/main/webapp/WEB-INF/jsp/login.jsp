@@ -10,29 +10,36 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
 </head>
 <body>
-<div class="login-page">
-    <div class="card login-card">
-        <h1>Login</h1>
-        <p>Entre com login e senha para acessar o sistema.</p>
+<div class="auth-page">
+    <aside class="auth-brand">
+        <span class="auth-brand__label">Sistema de Desafios</span>
+        <p class="auth-brand__title">Desafio<br>Fitness</p>
+    </aside>
 
-        <c:if test="${not empty erro}">
-            <div class="alert alert-erro">${erro}</div>
-        </c:if>
+    <div class="auth-panel">
+        <div class="auth-card">
+            <h1>Login</h1>
+            <p>Entre com login e senha para acessar o sistema.</p>
 
-        <form method="post" action="${pageContext.request.contextPath}/login">
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="text" id="email" name="email" required autofocus>
-            </div>
-            <div class="form-group">
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" required>
-            </div>
-            <div class="actions">
-                <button type="submit" class="btn">Entrar</button>
-            </div>
-            <a href="${pageContext.request.contextPath}/register">Não tem conta? Registre-se</a>
-        </form>
+            <c:if test="${not empty erro}">
+                <div class="alert alert-erro">${erro}</div>
+            </c:if>
+
+            <form method="post" action="${pageContext.request.contextPath}/login">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="text" id="email" name="email" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" required>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn">Entrar</button>
+                </div>
+                <a class="auth-card__link" href="${pageContext.request.contextPath}/register">Não tem conta? Registre-se</a>
+            </form>
+        </div>
     </div>
 </div>
 </body>

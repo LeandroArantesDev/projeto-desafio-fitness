@@ -94,8 +94,9 @@ a:hover {
 .topbar {
   background: var(--color-ink);
   color: var(--color-white);
-  padding: 1.1rem 0;
+  padding: 1.25rem 0;
   margin-bottom: 2rem;
+  border-bottom: var(--border-width) solid rgba(255, 255, 255, 0.1);
 }
 
 .topbar .container {
@@ -105,21 +106,61 @@ a:hover {
   gap: 1rem;
 }
 
-.topbar strong {
+.topbar .topbar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--color-white);
   font-family: var(--font-display);
   font-weight: var(--fw-title);
   font-size: 1.15rem;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+  padding-bottom: 0.4rem;
+}
+
+.topbar .topbar__brand:hover {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.topbar .topbar__brand.active {
+  color: var(--color-accent);
+}
+
+.topbar .topbar__brand.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-accent);
+}
+
+.topbar__icon {
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+.topbar nav {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .topbar a {
+  position: relative;
   color: var(--color-text-on-ink);
   font-family: var(--font-body);
   font-weight: var(--fw-label);
   font-size: var(--fs-label);
   text-transform: uppercase;
   letter-spacing: var(--ls-label);
+  padding-bottom: 0.4rem;
 }
 
 .topbar a:hover {
@@ -127,11 +168,18 @@ a:hover {
   text-decoration: none;
 }
 
-.topbar nav {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  align-items: center;
+.topbar a.active {
+  color: var(--color-accent);
+}
+
+.topbar a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-accent);
 }
 
 .page-header {
@@ -152,12 +200,25 @@ a:hover {
 }
 
 h2 {
-  font-family: var(--font-display);
-  font-size: var(--fs-number);
-  line-height: var(--lh-number);
-  font-weight: var(--fw-number);
+  position: relative;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin: 2rem 0 1rem;
+  color: var(--color-ink);
+  margin: 2.5rem 0 1.5rem;
+  padding-bottom: 0.65rem;
+}
+
+h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 28px;
+  height: 3px;
+  background: var(--color-accent);
 }
 
 .form-group {
@@ -251,6 +312,12 @@ textarea {
   background: var(--danger-bg);
 }
 
+.btn-table {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
 .alert {
   padding: 0.85rem 1rem;
   border-radius: var(--radius);
@@ -300,8 +367,9 @@ tr:last-child td {
 
 .links {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
 }
 
 .empty {
