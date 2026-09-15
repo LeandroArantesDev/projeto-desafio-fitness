@@ -14,8 +14,6 @@ CREATE TABLE usuarios (
     email VARCHAR(150) NOT NULL UNIQUE,
     tipo ENUM('admin', 'user') DEFAULT 'user',
     senha_hash VARCHAR(255) NOT NULL,
-    status ENUM('ativo', 'inativo', 'suspenso') DEFAULT 'ativo',
-    ultimo_login DATETIME DEFAULT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
