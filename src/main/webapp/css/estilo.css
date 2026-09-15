@@ -1,14 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap");
+
 :root {
-  --bg: #f3f5f8;
-  --surface: #ffffff;
-  --text: #1f2937;
-  --muted: #6b7280;
-  --border: #d7dde5;
-  --primary: #1f4e79;
-  --primary-hover: #163a5a;
+  /* Paleta — Gym Floor (oklch e fonte da verdade, hex e aproximacao sRGB) */
+  --color-ink: oklch(0.18 0 0); /* #121212 — texto, blocos */
+  --color-text-secondary: oklch(0.4 0.01 84); /* #55534E */
+  --color-label: oklch(0.5 0.01 84); /* #77756F */
+  --color-text-on-ink: oklch(0.82 0.01 84); /* #C9C7C1 */
+  --color-track: oklch(0.94 0.005 84); /* #EEECE7 */
+  --color-border: oklch(0.9 0.005 84); /* #E3E2DD */
+  --color-white: oklch(1 0 0); /* #FFFFFF */
+  --color-accent: oklch(0.82 0.16 84); /* #F0AE24 — Amber 500 */
+  --color-accent-subtle: oklch(0.93 0.05 86); /* #F4E1C2 — Amber 100 */
+  --color-accent-ink: var(--color-ink); /* texto sobre amarelo e sempre ink */
+
+  /* Aliases semanticos usados nos componentes globais */
+  --bg: var(--color-white);
+  --surface: var(--color-white);
+  --text: var(--color-ink);
+  --muted: var(--color-text-secondary);
+  --border: var(--color-border);
+  --accent-hover: oklch(0.76 0.16 84);
   --danger: #b42318;
   --danger-bg: #fef3f2;
-  --ok-bg: #ecfdf3;
+
+  /* Tipografia — Oswald (titulos/numeros) + Source Sans 3 (corpo) */
+  --font-display: "Oswald", "Segoe UI", sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", sans-serif;
+
+  --fs-display: 4.5rem; /* 72px */
+  --lh-display: 0.92;
+  --ls-display: 0.01em;
+  --fw-display: 600;
+
+  --fs-title: 2.5rem; /* 40px */
+  --lh-title: 1.05;
+  --fw-title: 600;
+
+  --fs-number: 2rem; /* 32px */
+  --lh-number: 1;
+  --fw-number: 600;
+
+  --fs-body: 1.0625rem; /* 17px */
+  --lh-body: 1.6;
+  --fw-body: 400;
+
+  --fs-support: 0.9375rem; /* 15px */
+  --lh-support: 1.55;
+  --fw-support: 400;
+
+  --fs-label: 0.6875rem; /* 11px */
+  --ls-label: 0.12em;
+  --fw-label: 700;
+
+  /* Formato — desktop, cantos retos, reguas de 1px, sem sombra */
+  --radius: 2px;
+  --border-width: 1px;
 }
 
 * {
@@ -17,13 +63,15 @@
 
 body {
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   background: var(--bg);
   color: var(--text);
 }
 
 a {
-  color: var(--primary);
+  color: var(--text);
   text-decoration: none;
 }
 
@@ -36,39 +84,18 @@ a:hover {
   margin: 0 auto;
 }
 
-.login-page {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-}
-
 .card {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
   padding: 1.5rem;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-}
-
-.login-card {
-  width: min(420px, 92%);
-}
-
-.login-card h1 {
-  margin: 0 0 0.35rem;
-  font-size: 1.6rem;
-}
-
-.login-card p {
-  margin: 0 0 1.25rem;
-  color: var(--muted);
 }
 
 .topbar {
-  background: var(--primary);
-  color: #fff;
-  padding: 0.9rem 0;
-  margin-bottom: 1.5rem;
+  background: var(--color-ink);
+  color: var(--color-white);
+  padding: 1.1rem 0;
+  margin-bottom: 2rem;
 }
 
 .topbar .container {
@@ -78,14 +105,33 @@ a:hover {
   gap: 1rem;
 }
 
+.topbar strong {
+  font-family: var(--font-display);
+  font-weight: var(--fw-title);
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 .topbar a {
-  color: #fff;
+  color: var(--color-text-on-ink);
+  font-family: var(--font-body);
+  font-weight: var(--fw-label);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+}
+
+.topbar a:hover {
+  color: var(--color-accent);
+  text-decoration: none;
 }
 
 .topbar nav {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .page-header {
@@ -93,123 +139,136 @@ a:hover {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .page-header h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  font-weight: var(--fw-title);
+  text-transform: uppercase;
 }
 
-.grid-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-}
-
-.menu-card {
-  display: block;
-  padding: 1.25rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: inherit;
-}
-
-.menu-card:hover {
-  text-decoration: none;
-  border-color: var(--primary);
-}
-
-.menu-card strong {
-  display: block;
-  margin-bottom: 0.35rem;
-  color: var(--primary);
-}
-
-.menu-card span {
-  color: var(--muted);
-  font-size: 0.95rem;
+h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-number);
+  line-height: var(--lh-number);
+  font-weight: var(--fw-number);
+  text-transform: uppercase;
+  margin: 2rem 0 1rem;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 label {
   display: block;
-  margin-bottom: 0.35rem;
-  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  color: var(--color-label);
 }
 
 input[type="text"],
 input[type="password"],
-select {
+input[type="number"],
+input[type="date"],
+select,
+textarea {
   width: 100%;
-  padding: 0.65rem 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
   font: inherit;
-  background: #fff;
+  color: var(--text);
+  background: var(--color-white);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-ink);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 5rem;
 }
 
 .actions {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .btn {
   display: inline-block;
-  border: 0;
-  border-radius: 8px;
-  padding: 0.65rem 1rem;
-  font: inherit;
+  border: var(--border-width) solid var(--color-accent);
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
   cursor: pointer;
-  background: var(--primary);
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 
 .btn:hover {
-  background: var(--primary-hover);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
   text-decoration: none;
 }
 
 .btn-secondary {
-  background: #e5e7eb;
+  background: transparent;
+  border-color: var(--color-border);
   color: var(--text);
 }
 
 .btn-secondary:hover {
-  background: #d1d5db;
+  background: var(--color-track);
+  border-color: var(--color-border);
 }
 
 .btn-danger {
-  background: var(--danger);
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
 .btn-danger:hover {
-  background: #912018;
+  background: var(--danger-bg);
 }
 
 .alert {
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.25rem;
+  font-size: var(--fs-support);
 }
 
 .alert-erro {
   background: var(--danger-bg);
   color: var(--danger);
-  border: 1px solid #fecdca;
+  border: var(--border-width) solid #fecdca;
 }
 
 .table-wrap {
   overflow-x: auto;
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
 }
 
 table {
@@ -219,15 +278,20 @@ table {
 
 th,
 td {
-  padding: 0.8rem 0.9rem;
-  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 1rem;
+  border-bottom: var(--border-width) solid var(--border);
   text-align: left;
   vertical-align: top;
 }
 
 th {
-  background: #f8fafc;
-  font-size: 0.9rem;
+  background: var(--color-track);
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  color: var(--color-label);
 }
 
 tr:last-child td {
@@ -242,5 +306,7 @@ tr:last-child td {
 
 .empty {
   color: var(--muted);
+  font-size: var(--fs-support);
+  line-height: var(--lh-support);
   padding: 1rem;
 }

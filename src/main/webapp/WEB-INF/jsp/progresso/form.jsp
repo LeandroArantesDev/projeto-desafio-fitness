@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registrar progresso - MVC Aula</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/progresso-form.css">
 </head>
 <body>
 <header class="topbar">

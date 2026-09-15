@@ -10,6 +10,10 @@ taglib prefix="c" uri="jakarta.tags.core" %>
       rel="stylesheet"
       href="${pageContext.request.contextPath}/css/estilo.css"
     />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/home.css"
+    />
   </head>
   <body>
     <header class="topbar">

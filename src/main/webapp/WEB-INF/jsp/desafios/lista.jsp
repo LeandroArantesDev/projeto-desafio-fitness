@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Desafios - MVC Aula</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/desafios-lista.css">
 </head>
 <body>
     <header class="topbar">
