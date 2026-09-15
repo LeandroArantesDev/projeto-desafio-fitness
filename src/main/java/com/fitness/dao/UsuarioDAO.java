@@ -25,7 +25,7 @@ public class UsuarioDAO extends MysqlDAO {
     // Corrigido
     public Usuario buscarPorLoginESenha(String email, String senha) {
         String sql =
-                "SELECT id, nome, email, tipo, senha_hash, avatar_url, status, ultimo_login, criado_em, atualizado_em "
+                "SELECT id, nome, email, tipo, senha_hash, status, ultimo_login, criado_em, atualizado_em "
                         + "FROM usuarios "
                         + "WHERE email = ?";
 
@@ -52,7 +52,6 @@ public class UsuarioDAO extends MysqlDAO {
         usuario.setEmail(rs.getString("email"));
         usuario.setTipo(rs.getString("tipo"));
         usuario.setSenha(rs.getString("senha_hash"));
-        usuario.setAvatar(rs.getString("avatar_url"));
         usuario.setStatus(rs.getString("status"));
         usuario.setUltimoLogin(rs.getObject("ultimo_login", LocalDateTime.class));
         usuario.setCriadoEm(rs.getObject("criado_em", LocalDateTime.class));
@@ -63,7 +62,7 @@ public class UsuarioDAO extends MysqlDAO {
 
     public List<Usuario> listarTodos() {
         String sql =
-                "SELECT id, nome, email, tipo, senha_hash, avatar_url, status, ultimo_login, criado_em, atualizado_em "
+                "SELECT id, nome, email, tipo, senha_hash, status, ultimo_login, criado_em, atualizado_em "
                         + "FROM usuarios "
                         + "ORDER BY nome";
         List<Usuario> lista = new ArrayList<>();
@@ -122,7 +121,9 @@ public class UsuarioDAO extends MysqlDAO {
     }
 
     public void registrar(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nome, email, senha)";
+        String sql = "INSERT INTO usuarios (nome, email, senha, tipo)"
+                        +"VALUES (?, ?, ?, ?)";
+        
     }
 
     public void inserir(Usuario usuario) {

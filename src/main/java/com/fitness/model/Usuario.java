@@ -9,7 +9,6 @@ public class Usuario {
     private String email;
     private String tipo;
     private String senha_hash;
-    private String avatar_url;
     private String status;
     private LocalDateTime ultimo_login;
     private LocalDateTime criado_em;
@@ -53,14 +52,6 @@ public class Usuario {
 
     public void setSenha(String senha_hash) {
         this.senha_hash = senha_hash;
-    }
-
-    public String getAvatar() {
-        return avatar_url;
-    }
-
-    public void setAvatar(String avatar_url) {
-        this.avatar_url = avatar_url;
     }
 
     public String getStatus() {
