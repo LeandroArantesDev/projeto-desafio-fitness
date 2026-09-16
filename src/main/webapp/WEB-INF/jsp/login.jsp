@@ -28,11 +28,11 @@
             <form method="post" action="${pageContext.request.contextPath}/login">
                 <div class="form-group">
                     <label for="email">E-mail</label>
-                    <input type="text" id="email" name="email" required autofocus>
+                    <input type="email" id="email" name="email" maxlength="150" required autofocus autocomplete="email">
                 </div>
                 <div class="form-group">
                     <label for="senha">Senha</label>
-                    <input type="password" id="senha" name="senha" required>
+                    <input type="password" id="senha" name="senha" minlength="6" maxlength="72" required autocomplete="current-password">
                 </div>
                 <div class="actions">
                     <button type="submit" class="btn">Entrar</button>

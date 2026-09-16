@@ -5,38 +5,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login - MVC Aula</title>
+    <title>Registro - Desafio Fitness</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/register.css">
 </head>
 <body>
-<div class="login-page">
-    <div class="card login-card">
-        <h1>Registro</h1>
-        <p>Registre-se para acessar o sistema.</p>
+<div class="auth-page">
+    <aside class="auth-brand">
+        <span class="auth-brand__label">Sistema de Desafios</span>
+        <p class="auth-brand__title">Desafio<br>Fitness</p>
+    </aside>
 
-        <c:if test="${not empty erro}">
-            <div class="alert alert-erro">${erro}</div>
-        </c:if>
+    <div class="auth-panel">
+        <div class="auth-card">
+            <h1>Registro</h1>
+            <p>Registre-se para acessar o sistema.</p>
 
-        <form method="post" action="${pageContext.request.contextPath}/register">
-            <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" name="nome" id="nome" required autofocus>
-            </div>
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="text" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" required>
-            </div>
-            <div class="actions">
-                <button type="submit" class="btn">Registrar</button>
-            </div>
-            <a href="${pageContext.request.contextPath}/login">Tem conta? Faça Login</a>
-        </form>
+            <c:if test="${not empty erro}">
+                <div class="alert alert-erro">${erro}</div>
+            </c:if>
+
+            <form method="post" action="${pageContext.request.contextPath}/register">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" name="nome" id="nome" minlength="2" maxlength="100" required autofocus autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" maxlength="150" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" minlength="6" maxlength="72" required autocomplete="new-password">
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn">Registrar</button>
+                </div>
+                <a class="auth-card__link" href="${pageContext.request.contextPath}/login">Tem conta? Faça Login</a>
+            </form>
+        </div>
     </div>
 </div>
 </body>
