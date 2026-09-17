@@ -24,7 +24,7 @@ public class UsuarioDAO extends MysqlDAO {
 
     public Usuario buscarPorLoginESenha(String email, String senha) {
         String sql =
-                "SELECT id, nome, email, tipo, senha_hash, status, ultimo_login, criado_em, atualizado_em "
+                "SELECT id, nome, email, tipo, senha_hash, criado_em, atualizado_em "
                         + "FROM usuarios "
                         + "WHERE email = ?";
 
@@ -38,7 +38,8 @@ public class UsuarioDAO extends MysqlDAO {
             throw new RuntimeException("Erro ao buscar usuario.", e);
         }
 
-        if (usuario != null && BCrypt.checkpw(senha, usuario.getSenha())) {
+        if (usuario != null && usuario.getSenha() != null
+            && BCrypt.checkpw(senha, usuario.getSenha())) {
             return usuario;
         }
         return null;
@@ -66,17 +67,15 @@ public class UsuarioDAO extends MysqlDAO {
         usuario.setEmail(rs.getString("email"));
         usuario.setTipo(rs.getString("tipo"));
         usuario.setSenha(rs.getString("senha_hash"));
-        usuario.setStatus(rs.getString("status"));
-        usuario.setUltimoLogin(rs.getObject("ultimo_login", LocalDateTime.class));
         usuario.setCriadoEm(rs.getObject("criado_em", LocalDateTime.class));
-        usuario.setAtualizado_em(rs.getObject("atualizado_em", LocalDateTime.class));
+        usuario.setAtualizadoEm(rs.getObject("atualizado_em", LocalDateTime.class));
 
         return usuario;
     }
 
     public List<Usuario> listarTodos() {
         String sql =
-                "SELECT id, nome, email, tipo, senha_hash, status, ultimo_login, criado_em, atualizado_em "
+                "SELECT id, nome, email, tipo, senha_hash, criado_em, atualizado_em "
                         + "FROM usuarios "
                         + "ORDER BY nome";
         List<Usuario> lista = new ArrayList<>();
@@ -92,7 +91,7 @@ public class UsuarioDAO extends MysqlDAO {
 
     public Usuario buscarPorLogin(String email) {
         String sql =
-                "SELECT id, nome, email, senha_hash, tipo"
+            "SELECT id, nome, email, senha_hash, tipo, criado_em, atualizado_em "
                         + "FROM usuarios "
                         + "WHERE email = ?";
         try (ResultSet rs = super.executar(sql, email)) {
@@ -107,7 +106,7 @@ public class UsuarioDAO extends MysqlDAO {
 
     public Usuario buscarPorId(Long id) {
         String sql =
-                "SELECT id, nome, email, senha_hash, tipo"
+            "SELECT id, nome, email, senha_hash, tipo, criado_em, atualizado_em "
                         + "FROM usuarios "
                         + "WHERE id = ?";
         try (ResultSet rs = super.executar(sql, id)) {
@@ -138,28 +137,33 @@ public class UsuarioDAO extends MysqlDAO {
 
 
     public void inserir(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nome, login, senha_hash, tipo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO usuarios (nome, email, senha_hash, tipo) VALUES (?, ?, ?, ?)";
+        String senhaCriptografada = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
         try {
             super.executarUpdate(
                     sql,
                     usuario.getNome(),
                     usuario.getEmail(),
-                    usuario.getSenha());
+                    senhaCriptografada,
+                    usuario.getTipo());
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir.", e);
         }
     }
 
     public void alterar(Usuario usuario) {
-        String sql = "UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?";
         try {
-            super.executarUpdate(
-                    sql,
-                    usuario.getNome(),
-                    usuario.getEmail(),
-                    usuario.getSenha(),
+            if (usuario.getSenha() == null || usuario.getSenha().isBlank()) {
+                String sql = "UPDATE usuarios SET nome = ?, email = ?, tipo = ? WHERE id = ?";
+                super.executarUpdate(sql, usuario.getNome(), usuario.getEmail(),
+                        usuario.getTipo(), usuario.getId());
+                return;
+            }
 
-                    usuario.getId());
+            String sql = "UPDATE usuarios SET nome = ?, email = ?, tipo = ?, senha_hash = ? WHERE id = ?";
+            String senhaCriptografada = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
+            super.executarUpdate(sql, usuario.getNome(), usuario.getEmail(),
+                    usuario.getTipo(), senhaCriptografada, usuario.getId());
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao alterar.", e);
         }

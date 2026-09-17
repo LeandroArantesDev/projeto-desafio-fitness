@@ -10,7 +10,6 @@ public class Usuario {
     private String tipo;
     private String senha_hash;
     private String status;
-    private LocalDateTime ultimo_login;
     private LocalDateTime criado_em;
     private LocalDateTime atualizado_em;
 
@@ -62,14 +61,6 @@ public class Usuario {
         this.status = status;
     }
 
-    public LocalDateTime getUltimoLogin() {
-        return ultimo_login;
-    }
-
-    public void setUltimoLogin(LocalDateTime ultimo_login) {
-        this.ultimo_login = ultimo_login;
-    }
-
     public LocalDateTime getCriadoEm() {
         return criado_em;
     }
@@ -78,11 +69,11 @@ public class Usuario {
         this.criado_em = criado_em;
     }
 
-    public LocalDateTime getAtualizado_em() {
+    public LocalDateTime getAtualizadoEm() {
         return atualizado_em;
     }
 
-    public void setAtualizado_em(LocalDateTime atualizado_em) {
+    public void setAtualizadoEm(LocalDateTime atualizado_em) {
         this.atualizado_em = atualizado_em;
     }
 }

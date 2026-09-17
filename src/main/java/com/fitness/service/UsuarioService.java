@@ -92,7 +92,9 @@ public class UsuarioService {
 
         this.prepararDados(usuario);
         this.validarCamposObrigatorios(usuario);
-        this.validarSenha(usuario.getSenha());
+        if (usuario.getId() == null || usuario.getSenha() != null) {
+            this.validarSenha(usuario.getSenha());
+        }
         this.validarLoginUnico(usuario);
 
         if (usuario.getId() == null) {
@@ -132,15 +134,15 @@ public class UsuarioService {
             throw new IllegalArgumentException("Nome e obrigatorio.");
         }
         if (usuario.getEmail() == null) {
-            throw new IllegalArgumentException("Login e obrigatorio.");
+            throw new IllegalArgumentException("E-mail e obrigatorio.");
         }
-        if (usuario.getSenha() == null) {
+        if (usuario.getId() == null && usuario.getSenha() == null) {
             throw new IllegalArgumentException("Senha e obrigatoria.");
         }
     }
 
     private void validarSenha(String senha) {
-        if (senha.length() < SENHA_MINIMA) {
+        if (senha == null || senha.length() < SENHA_MINIMA) {
             throw new IllegalArgumentException("Senha deve ter no minimo " + SENHA_MINIMA + " caracteres.");
         }
     }

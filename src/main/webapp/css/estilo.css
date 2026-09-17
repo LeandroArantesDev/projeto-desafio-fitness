@@ -332,6 +332,12 @@ textarea {
   border: var(--border-width) solid #fecdca;
 }
 
+.alert-sucesso {
+  background: #ecfdf3;
+  color: #087443;
+  border: var(--border-width) solid #abefc6;
+}
+
 .table-wrap {
   overflow-x: auto;
   background: var(--surface);

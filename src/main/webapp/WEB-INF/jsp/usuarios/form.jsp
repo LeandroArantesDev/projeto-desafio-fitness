@@ -56,7 +56,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="email">Login</label>
+                    <label for="email">E-mail</label>
                     <input type="text" id="email" name="email" value="${usuario.email}" required>
                 </div>
 
@@ -71,7 +71,11 @@
 
             <div class="form-group">
                 <label for="senha">Senha</label>
-                <input type="text" id="senha" name="senha_hash" value="${usuario.senha}" required>
+                <input type="password" id="senha" name="senha" minlength="6" autocomplete="new-password"
+                       <c:if test="${empty usuario.id}">required</c:if>>
+                <c:if test="${not empty usuario.id}">
+                    <small>Deixe em branco para manter a senha atual.</small>
+                </c:if>
             </div>
 
             <div class="actions">

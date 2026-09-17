@@ -45,7 +45,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
-                        <th>Login</th>
+                        <th>E-mail</th>
                         <th>Tipo</th>
                         <th>Acoes</th>
                     </tr>
