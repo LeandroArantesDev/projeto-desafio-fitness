@@ -46,7 +46,9 @@
   color: var(--color-ink);
   opacity: 0;
   transform: translateX(-4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .menu-card:hover::after {
@@ -108,4 +110,43 @@
 .challenge-card .btn {
   align-self: flex-start;
   margin-top: auto;
+}
+
+.challenge-card__progress {
+  margin-top: 0.5rem;
+}
+
+.challenge-card__progress-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+  color: var(--muted);
+  font-size: var(--fs-support);
+}
+
+.challenge-card__progress-header strong {
+  color: var(--text);
+  font-weight: 600;
+  text-align: right;
+}
+
+.progress-track {
+  height: 0.5rem;
+  overflow: hidden;
+  background: var(--color-track);
+  border-radius: var(--radius);
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--color-accent);
+}
+
+.challenge-card__progress-percent {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: var(--fs-label);
 }

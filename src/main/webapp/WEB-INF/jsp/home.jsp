@@ -63,7 +63,24 @@ taglib prefix="fn" uri="jakarta.tags.functions" %>
                   <strong class="challenge-card__title">${desafio.nome}</strong>
                   <span class="challenge-card__stat">${desafio.metaTotal} <small>${desafio.unidadeMedida}</small></span>
                   <span class="challenge-card__period">${fn:substring(desafio.dataInicio, 8, 10)}/${fn:substring(desafio.dataInicio, 5, 7)}/${fn:substring(desafio.dataInicio, 0, 4)} a ${fn:substring(desafio.dataFim, 8, 10)}/${fn:substring(desafio.dataFim, 5, 7)}/${fn:substring(desafio.dataFim, 0, 4)}</span>
-                  <a class="btn" href="${pageContext.request.contextPath}/desafios?acao=participar&id=${desafio.id}">Participar</a>
+                  <c:choose>
+                    <c:when test="${desafio.participando}">
+                      <div class="challenge-card__progress">
+                        <div class="challenge-card__progress-header">
+                          <span>Seu progresso</span>
+                          <strong>${desafio.progressoAtual} / ${desafio.metaTotal} ${desafio.unidadeMedida}</strong>
+                        </div>
+                        <div class="progress-track" role="progressbar" aria-valuenow="${desafio.progressoPercentual}" aria-valuemin="0" aria-valuemax="100">
+                          <span class="progress-fill" style="width: ${desafio.progressoPercentual}%"></span>
+                        </div>
+                        <span class="challenge-card__progress-percent">${desafio.progressoPercentual}% concluído</span>
+                      </div>
+                      <a class="btn btn-secondary" href="${pageContext.request.contextPath}/progresso?desafioId=${desafio.id}">Ver progresso</a>
+                    </c:when>
+                    <c:otherwise>
+                      <a class="btn" href="${pageContext.request.contextPath}/desafios?acao=participar&id=${desafio.id}">Participar</a>
+                    </c:otherwise>
+                  </c:choose>
                 </article>
               </c:if>
             </c:forEach>
