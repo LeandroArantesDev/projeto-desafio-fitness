@@ -326,13 +326,13 @@ textarea {
   font-size: var(--fs-support);
 }
 
-.alert-erro {
+.erro {
   background: var(--danger-bg);
   color: var(--danger);
   border: var(--border-width) solid #fecdca;
 }
 
-.alert-sucesso {
+.sucesso {
   background: #ecfdf3;
   color: #087443;
   border: var(--border-width) solid #abefc6;

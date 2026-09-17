@@ -19,6 +19,7 @@ import java.io.IOException;
 public class ProgressoServlet extends BaseServlet {
 
     private static final String FORM = "/WEB-INF/jsp/progresso/form.jsp";
+    private static final String LISTA_DESAFIOS = "/WEB-INF/jsp/desafios/lista.jsp";
 
     private final ProgressoService progressoService = new ProgressoService();
     private final ParticipacaoService participacaoService = new ParticipacaoService();
@@ -63,7 +64,11 @@ public class ProgressoServlet extends BaseServlet {
 
         try {
             this.progressoService.registrar(progresso);
-            this.redirect(req, resp, "/desafios");
+            req.setAttribute("sucesso", "Progresso registrado com sucesso.");
+            Usuario usuarioLogado = this.usuarioLogado(req);
+            req.setAttribute("desafiosParticipando", this.desafioService.listarParticipando(usuarioLogado.getId()));
+            req.setAttribute("desafiosCriados", this.desafioService.listarCriadosPor(usuarioLogado.getId()));
+            this.forward(req, resp, LISTA_DESAFIOS);
         } catch (IllegalArgumentException e) {
             Participacao participacao = this.participacaoService.buscarPorId(progresso.getParticipacaoId());
 

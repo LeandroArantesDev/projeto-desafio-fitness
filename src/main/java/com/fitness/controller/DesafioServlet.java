@@ -41,7 +41,8 @@ public class DesafioServlet extends BaseServlet {
                     this.listar(req, resp);
                     return;
                 }
-                this.redirect(req, resp, "/desafios");
+                req.setAttribute("sucesso", "Desafio excluido com sucesso.");
+                this.listar(req, resp);
             }
             default -> this.listar(req, resp);
         }
@@ -56,7 +57,8 @@ public class DesafioServlet extends BaseServlet {
 
         try {
             this.desafioService.salvar(desafio);
-            this.redirect(req, resp, "/desafios");
+            req.setAttribute("sucesso", "Desafio salvo com sucesso.");
+            this.listar(req, resp);
         } catch (IllegalArgumentException e) {
             req.setAttribute("erro", e.getMessage());
             this.form(req, resp, desafio);

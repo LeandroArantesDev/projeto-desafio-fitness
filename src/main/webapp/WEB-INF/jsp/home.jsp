@@ -7,6 +7,7 @@ taglib prefix="fn" uri="jakarta.tags.functions" %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Home - MVC Aula</title>
+      <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/img/trofeu.svg" />
     <link
       rel="stylesheet"
       href="${pageContext.request.contextPath}/css/estilo.css"

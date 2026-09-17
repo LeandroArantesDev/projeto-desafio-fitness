@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Usuarios - MVC Aula</title>
+    <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/img/trofeu.svg">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/usuarios-lista.css">
 </head>
@@ -30,8 +31,12 @@
         <a class="btn" href="${pageContext.request.contextPath}/usuarios?acao=novo">Novo usuario</a>
     </div>
 
+    <c:if test="${not empty sucesso}">
+        <div class="alert sucesso">${sucesso}</div>
+    </c:if>
+
     <c:if test="${not empty erro}">
-        <div class="alert alert-erro">${erro}</div>
+        <div class="alert erro">${erro}</div>
     </c:if>
 
     <div class="table-wrap">

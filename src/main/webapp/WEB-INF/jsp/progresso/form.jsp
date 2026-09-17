@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registrar progresso - MVC Aula</title>
+    <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/img/trofeu.svg">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/progresso-form.css">
 </head>
@@ -47,8 +48,12 @@
             </div>
 
             <div class="card">
+                <c:if test="${not empty sucesso}">
+                    <div class="alert sucesso">${sucesso}</div>
+                </c:if>
+
                 <c:if test="${not empty erro}">
-                    <div class="alert alert-erro">${erro}</div>
+                    <div class="alert erro">${erro}</div>
                 </c:if>
 
                 <form method="post" action="${pageContext.request.contextPath}/progresso">

@@ -43,7 +43,7 @@ public class HomeServlet extends BaseServlet {
                 : (progresso / desafio.getMetaTotal()) * 100.0;
             desafio.setProgressoPercentual(Math.min(100.0, percentual));
         }
-
+        
         req.setAttribute("desafios", desafios);
         this.forward(req, resp, VIEW);
     }

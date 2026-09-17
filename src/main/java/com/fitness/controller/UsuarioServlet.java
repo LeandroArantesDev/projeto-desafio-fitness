@@ -37,7 +37,9 @@ public class UsuarioServlet extends BaseServlet {
                     this.forward(req, resp, LISTA);
                     return;
                 }
-                this.redirect(req, resp, "/usuarios");
+                req.setAttribute("sucesso", "Usuario excluido com sucesso.");
+                req.setAttribute("usuarios", this.usuarioService.listar());
+                this.forward(req, resp, LISTA);
             }
             default -> {
                 req.setAttribute("usuarios", this.usuarioService.listar());
@@ -55,7 +57,9 @@ public class UsuarioServlet extends BaseServlet {
 
         try {
             this.usuarioService.salvar(usuario);
-            this.redirect(req, resp, "/usuarios");
+            req.setAttribute("sucesso", "Usuario salvo com sucesso.");
+            req.setAttribute("usuarios", this.usuarioService.listar());
+            this.forward(req, resp, LISTA);
         } catch (IllegalArgumentException e) {
             req.setAttribute("erro", e.getMessage());
             this.form(req, resp, usuario);
