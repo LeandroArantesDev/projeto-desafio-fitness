@@ -8,14 +8,16 @@ import java.sql.SQLException;
 
 public class MysqlSingleton {
 
-    private static final String URL =
-            "jdbc:mysql://mysql:3306/projeto_desafios_fitness?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    // Config
+    private static final String URL = "jdbc:mysql://mysql:3306/projeto_desafios_fitness?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     private static final String USER = "pdf_user";
     private static final String PASSWORD = "pdf123";
 
+    // Estado do Singleton
     private static MysqlSingleton instance;
     private Connection conexao;
 
+    // Construtor
     private MysqlSingleton() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -24,6 +26,7 @@ public class MysqlSingleton {
         }
     }
 
+    // Ponto de acesso
     public static synchronized MysqlSingleton getInstance() {
         if (instance == null) {
             instance = new MysqlSingleton();
@@ -31,6 +34,7 @@ public class MysqlSingleton {
         return instance;
     }
 
+    // Abrir/reaproveitar conexão
     private Connection obterConexao() throws SQLException {
         if (this.conexao == null || this.conexao.isClosed()) {
             this.conexao = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -38,6 +42,7 @@ public class MysqlSingleton {
         return this.conexao;
     }
 
+    // Executar SELECT
     public ResultSet executar(String sql, Object... parametros) throws SQLException {
         Connection conn = this.obterConexao();
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -47,6 +52,7 @@ public class MysqlSingleton {
         return ps.executeQuery();
     }
 
+    // Executar INSERT/UPDATE/DELETE
     public int executarUpdate(String sql, Object... parametros) throws SQLException {
         Connection conn = this.obterConexao();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

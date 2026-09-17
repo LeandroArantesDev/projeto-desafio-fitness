@@ -120,7 +120,14 @@ public class UsuarioService {
         if (this.usuarioDAO.buscarPorId(id) == null) {
             throw new IllegalArgumentException("Usuario nao encontrado.");
         }
-        this.usuarioDAO.deletar(id);
+        try {
+            this.usuarioDAO.deletar(id);
+        } catch (RuntimeException e) {
+            if (e.getCause() instanceof java.sql.SQLIntegrityConstraintViolationException) {
+                throw new IllegalArgumentException("Nao e possivel excluir: usuario possui desafios vinculados.");
+            }
+            throw e;
+        }
     }
 
     private void prepararDados(Usuario usuario) {

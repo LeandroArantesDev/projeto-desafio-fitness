@@ -21,7 +21,6 @@ public class DesafioServlet extends BaseServlet {
 
     private static final String LISTA = "/WEB-INF/jsp/desafios/lista.jsp";
     private static final String FORM = "/WEB-INF/jsp/desafios/form.jsp";
-
     private final DesafioService desafioService = new DesafioService();
     private final ParticipacaoService participacaoService = new ParticipacaoService();
 
@@ -114,6 +113,7 @@ public class DesafioServlet extends BaseServlet {
         this.forward(req, resp, LISTA);
     }
 
+    // Helper local
     private Usuario usuarioLogado(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
         return (Usuario) session.getAttribute("usuarioLogado");
