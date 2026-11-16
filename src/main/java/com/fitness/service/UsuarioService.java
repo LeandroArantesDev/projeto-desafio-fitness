@@ -34,7 +34,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("Informe e-mail e senha.");
         }
 
-        Usuario usuario = this.usuarioDAO.buscarPorLoginESenha(email, senha);
+        Usuario usuario = this.usuarioDAO.logar(email, senha);
         if (usuario == null) {
             throw new IllegalArgumentException("E-mail ou senha invalidos.");
         }
@@ -50,10 +50,6 @@ public class UsuarioService {
             throw new IllegalArgumentException("Informe nome, e-mail e senha.");
         }
 
-        if (!this.usuarioDAO.verificarUsuarioUnico(email)) {
-            throw new IllegalArgumentException("Já existe um usuário registrado com esse e-mail.");
-        }
-
         if (senha.length() < 8) {
             throw new IllegalArgumentException("A senha deve ter no mínimo 8 caracteres.");
         }
@@ -62,7 +58,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("Erro ao registrar usuário.");
         }
 
-        Usuario usuario = this.usuarioDAO.buscarPorLoginESenha(email, senha);
+        Usuario usuario = this.usuarioDAO.logar(email, senha);
         if (usuario == null) {
             throw new IllegalArgumentException("Erro ao buscar usuário.");
         }
@@ -95,7 +91,6 @@ public class UsuarioService {
         if (usuario.getId() == null || usuario.getSenha() != null) {
             this.validarSenha(usuario.getSenha());
         }
-        this.validarLoginUnico(usuario);
 
         if (usuario.getId() == null) {
             this.usuarioDAO.inserir(usuario);
@@ -151,21 +146,6 @@ public class UsuarioService {
     private void validarSenha(String senha) {
         if (senha == null || senha.length() < SENHA_MINIMA) {
             throw new IllegalArgumentException("Senha deve ter no minimo " + SENHA_MINIMA + " caracteres.");
-        }
-    }
-
-    private void validarLoginUnico(Usuario usuario) {
-        Usuario existente = this.usuarioDAO.buscarPorLogin(usuario.getEmail());
-        if (existente == null) {
-            return;
-        }
-        // no cadastro, qualquer login repetido e invalido
-        if (usuario.getId() == null) {
-            throw new IllegalArgumentException("Ja existe um usuario com este login.");
-        }
-        // na alteracao, so permite se o login for do proprio usuario
-        if (!existente.getId().equals(usuario.getId())) {
-            throw new IllegalArgumentException("Ja existe um usuario com este login.");
         }
     }
 

@@ -12,6 +12,7 @@ public class Usuario {
     private String status;
     private LocalDateTime criado_em;
     private LocalDateTime atualizado_em;
+    private String token; // Adicionado para a API
 
     public Long getId() {
         return id;
@@ -75,5 +76,15 @@ public class Usuario {
 
     public void setAtualizadoEm(LocalDateTime atualizado_em) {
         this.atualizado_em = atualizado_em;
+    }
+
+    // Adicionado para a API
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
