@@ -9,7 +9,7 @@ import java.util.List;
  * SERVICE de Usuario — regras de negocio ficam aqui.
  *
  * Controller so chama estes metodos e decide a view.
- * DAO so executa SQL.
+ * DAO so chama a API.
  */
 public class UsuarioService {
 
@@ -93,14 +93,18 @@ public class UsuarioService {
         }
 
         if (usuario.getId() == null) {
-            this.usuarioDAO.inserir(usuario);
+            if (!this.usuarioDAO.inserir(usuario)) {
+                throw new IllegalArgumentException("Erro ao cadastrar usuario.");
+            }
             return;
         }
 
         if (this.usuarioDAO.buscarPorId(usuario.getId()) == null) {
             throw new IllegalArgumentException("Usuario nao encontrado para alteracao.");
         }
-        this.usuarioDAO.alterar(usuario);
+        if (!this.usuarioDAO.alterar(usuario)) {
+            throw new IllegalArgumentException("Erro ao alterar usuario.");
+        }
     }
 
     /**
@@ -115,13 +119,9 @@ public class UsuarioService {
         if (this.usuarioDAO.buscarPorId(id) == null) {
             throw new IllegalArgumentException("Usuario nao encontrado.");
         }
-        try {
-            this.usuarioDAO.deletar(id);
-        } catch (RuntimeException e) {
-            if (e.getCause() instanceof java.sql.SQLIntegrityConstraintViolationException) {
-                throw new IllegalArgumentException("Nao e possivel excluir: usuario possui desafios vinculados.");
-            }
-            throw e;
+        // usuario existe; a API so recusa quando ele tem desafios vinculados
+        if (!this.usuarioDAO.deletar(id)) {
+            throw new IllegalArgumentException("Nao e possivel excluir: usuario possui desafios vinculados.");
         }
     }
 

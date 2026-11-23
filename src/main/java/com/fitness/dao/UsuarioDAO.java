@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * DAO = Data Access Object (acesso ao banco)
+ * DAO = Data Access Object (acesso a API)
  *
- * Somente SQL e conversao ResultSet -> {@link Usuario}.
+ * Somente chamadas HTTP para /api/login, /api/register e /api/usuarios e conversao JSON -> {@link Usuario}.
  * Quem decide "quando" chamar cada metodo e o Service / Controller.
  */
 public class UsuarioDAO extends ApiDAO {
@@ -31,6 +31,7 @@ public class UsuarioDAO extends ApiDAO {
             if (response.statusCode() == 200) {
                 JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
                 Usuario usuario = new Usuario();
+                usuario.setId(json.get("id").getAsLong());
                 usuario.setEmail(email);
                 usuario.setNome(json.get("nome").getAsString());
                 usuario.setTipo(json.get("tipo").getAsString());
@@ -47,7 +48,7 @@ public class UsuarioDAO extends ApiDAO {
         try {
             String jsonEnvio = this.gson.toJson(Map.of("nome", nome, "email", email, "senha_hash", senha));
             HttpResponse<String> response = this.api.post("/register", jsonEnvio);
-            return response.statusCode() == 201 || response.statusCode() == 200;
+            return response.statusCode() == 201;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao registrar usuário na API.", e);
         }
@@ -78,36 +79,30 @@ public class UsuarioDAO extends ApiDAO {
         }
     }
 
-    public void inserir(Usuario usuario) {
+    public boolean inserir(Usuario usuario) {
         try {
             String json = this.gson.toJson(usuario);
             HttpResponse<String> response = this.api.post("/usuarios", json);
-            if (response.statusCode() != 201 && response.statusCode() != 200) {
-                throw new RuntimeException("Erro da API: " + response.body());
-            }
+            return response.statusCode() == 201;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao inserir usuário na API.", e);
         }
     }
 
-    public void alterar(Usuario usuario) {
+    public boolean alterar(Usuario usuario) {
         try {
             String json = this.gson.toJson(usuario);
             HttpResponse<String> response = this.api.put("/usuarios/" + usuario.getId(), json);
-            if (response.statusCode() != 200) {
-                throw new RuntimeException("Erro da API: " + response.body());
-            }
+            return response.statusCode() == 200;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao alterar usuário na API.", e);
         }
     }
 
-    public void deletar(Long id) {
+    public boolean deletar(Long id) {
         try {
             HttpResponse<String> response = this.api.delete("/usuarios/" + id);
-            if (response.statusCode() != 204 && response.statusCode() != 200) {
-                throw new RuntimeException("Erro da API: " + response.body());
-            }
+            return response.statusCode() == 204;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao deletar usuário na API.", e);
         }
