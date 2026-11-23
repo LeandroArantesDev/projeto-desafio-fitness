@@ -11,9 +11,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Controller de Login.
- * Ponte entre rota (/login), {@link UsuarioService} e a view.
- * Sem regra de negocio: so chama o service e encaminha o resultado.
+ * Controller de Registro.
+ * Ponte entre rota, service e view — sem regra de negocio.
  */
 @WebServlet("/register")
 public class RegisterServlet extends BaseServlet {

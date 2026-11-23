@@ -8,6 +8,10 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+/**
+ * Controller de Logout.
+ * Ponte entre rota, service e view — sem regra de negocio.
+ */
 @WebServlet("/logout")
 public class LogoutServlet extends BaseServlet {
 
