@@ -11,6 +11,3 @@ services:
 
     volumes:
       - ./deploy:/usr/local/tomcat/webapps
-
-volumes:
-  mysql_data:

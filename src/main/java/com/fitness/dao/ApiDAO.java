@@ -4,10 +4,10 @@ import com.fitness.config.ApiSingleton;
 import com.google.gson.Gson;
 
 /**
- * Classe base dos DAOs que usam MySQL.
+ * Classe base dos DAOs que usam a API.
  *
- * Guarda referencia ao {@link MysqlSingleton} (uma conexao reutilizada).
- * Os DAOs filhos usam executar() para SELECT e executarUpdate() para INSERT/UPDATE/DELETE.
+ * Guarda referencia ao {@link ApiSingleton} (cliente HTTP com o token do usuario logado).
+ * Os DAOs filhos usam api.get/post/put/delete e o gson para converter o JSON.
  */
 public class ApiDAO {
 
