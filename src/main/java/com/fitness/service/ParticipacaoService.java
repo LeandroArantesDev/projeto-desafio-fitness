@@ -8,7 +8,7 @@ import com.fitness.model.Participacao;
  * SERVICE de Participacao — regras de negocio ficam aqui.
  *
  * Controller so chama estes metodos e decide a view.
- * DAO so executa SQL.
+ * DAO so chama a API.
  */
 public class ParticipacaoService {
 
@@ -35,22 +35,18 @@ public class ParticipacaoService {
             throw new IllegalArgumentException("Desafio nao encontrado.");
         }
 
-        if (this.participacaoDAO.existeParticipacao(usuarioId, desafioId)) {
+        if (this.participacaoDAO.buscarPorDesafio(desafioId) != null) {
             throw new IllegalArgumentException("Voce ja participa deste desafio.");
         }
 
-        Participacao participacao = new Participacao();
-        participacao.setUsuarioId(usuarioId);
-        participacao.setDesafioId(desafioId);
-        this.participacaoDAO.inserir(participacao);
+        if (!this.participacaoDAO.inserir(desafioId)) {
+            throw new IllegalArgumentException("Erro ao participar do desafio.");
+        }
     }
 
-    public Participacao buscarPorUsuarioEDesafio(Long usuarioId, Long desafioId) {
-        return this.participacaoDAO.buscarPorUsuarioEDesafio(usuarioId, desafioId);
-    }
-
-    public Participacao buscarPorId(Long id) {
-        return this.participacaoDAO.buscarPorId(id);
+    // participacao do usuario logado no desafio (null se nao participa)
+    public Participacao buscarPorDesafio(Long desafioId) {
+        return this.participacaoDAO.buscarPorDesafio(desafioId);
     }
 
 }

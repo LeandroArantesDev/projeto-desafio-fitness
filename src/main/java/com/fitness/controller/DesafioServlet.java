@@ -108,7 +108,7 @@ public class DesafioServlet extends BaseServlet {
             throws ServletException, IOException {
 
         Usuario usuarioLogado = this.usuarioLogado(req);
-        req.setAttribute("desafiosParticipando", this.desafioService.listarParticipando(usuarioLogado.getId()));
+        req.setAttribute("desafiosParticipando", this.desafioService.listarParticipando());
         req.setAttribute("desafiosCriados", this.desafioService.listarCriadosPor(usuarioLogado.getId()));
         this.forward(req, resp, LISTA);
     }

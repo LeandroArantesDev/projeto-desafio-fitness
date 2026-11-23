@@ -1,23 +1,27 @@
 package com.fitness.service;
 
-import com.fitness.dao.ParticipacaoDAO;
 import com.fitness.dao.ProgressoDAO;
 import com.fitness.model.Progresso;
 
 import java.util.List;
 
+/**
+ * SERVICE de Progresso — regras de negocio ficam aqui.
+ *
+ * Controller so chama estes metodos e decide a view.
+ * DAO so chama a API.
+ */
 public class ProgressoService {
 
     private final ProgressoDAO progressoDAO;
-    private final ParticipacaoDAO participacaoDAO;
 
     public ProgressoService() {
         this.progressoDAO = new ProgressoDAO();
-        this.participacaoDAO = new ParticipacaoDAO();
     }
 
-    public List<Progresso> listarPorParticipacao(Long participacaoId) {
-        return this.progressoDAO.listarPorParticipacao(participacaoId);
+    // historico do usuario logado no desafio
+    public List<Progresso> listarPorDesafio(Long desafioId) {
+        return this.progressoDAO.listarPorDesafio(desafioId);
     }
 
     public void registrar(Progresso progresso) {
@@ -27,11 +31,9 @@ public class ProgressoService {
 
         this.validarCamposObrigatorios(progresso);
 
-        if (this.participacaoDAO.buscarPorId(progresso.getParticipacaoId()) == null) {
-            throw new IllegalArgumentException("Participacao nao encontrada.");
+        if (!this.progressoDAO.inserir(progresso)) {
+            throw new IllegalArgumentException("Erro ao registrar progresso.");
         }
-
-        this.progressoDAO.inserir(progresso);
     }
 
     private void validarCamposObrigatorios(Progresso progresso) {
@@ -46,9 +48,9 @@ public class ProgressoService {
         }
     }
 
-    public Double totalRegistrado(Long participacaoId) {
+    public Double totalRegistrado(List<Progresso> historico) {
         Double total = 0.0;
-        for (Progresso progresso : this.progressoDAO.listarPorParticipacao(participacaoId)) {
+        for (Progresso progresso : historico) {
             total += progresso.getValorRegistrado();
         }
         return total;

@@ -2,81 +2,45 @@ package com.fitness.dao;
 
 import com.fitness.model.Participacao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.net.http.HttpResponse;
+import java.util.Map;
 
 /**
- * DAO = Data Access Object (acesso ao banco)
+ * DAO = Data Access Object (acesso a API)
  *
- * Somente SQL e conversao ResultSet -> {@link Participacao}.
+ * Somente chamadas HTTP e conversao JSON -> {@link Participacao}.
+ * O usuario e sempre o do token (a API identifica pelo Bearer).
  * Quem decide "quando" chamar cada metodo e o Service / Controller.
  */
-public class ParticipacaoDAO extends MysqlDAO {
+public class ParticipacaoDAO extends ApiDAO {
 
     public ParticipacaoDAO() {
         super();
     }
 
-    private Participacao mapearParticipacao(ResultSet rs) throws SQLException {
-        Participacao participacao = new Participacao();
-        participacao.setId(rs.getLong("id"));
-        participacao.setUsuarioId(rs.getLong("usuario_id"));
-        participacao.setDesafioId(rs.getLong("desafio_id"));
-        participacao.setStatus(rs.getString("status"));
-        participacao.setConcluidoEm(rs.getObject("concluido_em", LocalDateTime.class));
-        participacao.setCriadoEm(rs.getObject("criado_em", LocalDateTime.class));
-        participacao.setAtualizado_em(rs.getObject("atualizado_em", LocalDateTime.class));
-
-        return participacao;
-    }
-
-    public Participacao buscarPorId(Long id) {
-        String sql = "SELECT id, usuario_id, desafio_id, status, concluido_em, criado_em, atualizado_em "
-                + "FROM participacoes_desafio "
-                + "WHERE id = ?";
-        try (ResultSet rs = super.executar(sql, id)) {
-            if (rs.next()) {
-                return this.mapearParticipacao(rs);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar participacao por id.", e);
-        }
-        return null;
-    }
-
-    public Participacao buscarPorUsuarioEDesafio(Long usuarioId, Long desafioId) {
-        String sql = "SELECT id, usuario_id, desafio_id, status, concluido_em, criado_em, atualizado_em "
-                + "FROM participacoes_desafio "
-                + "WHERE usuario_id = ? AND desafio_id = ?";
-        try (ResultSet rs = super.executar(sql, usuarioId, desafioId)) {
-            if (rs.next()) {
-                return this.mapearParticipacao(rs);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar participacao.", e);
-        }
-        return null;
-    }
-
-    public boolean existeParticipacao(Long usuarioId, Long desafioId) {
-        String sql = "SELECT id FROM participacoes_desafio WHERE usuario_id = ? AND desafio_id = ?";
-        try (ResultSet rs = super.executar(sql, usuarioId, desafioId)) {
-            return rs.next();
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao verificar participacao.", e);
-        }
-    }
-
-    public void inserir(Participacao participacao) {
-        String sql = "INSERT INTO participacoes_desafio (usuario_id, desafio_id) VALUES (?, ?)";
+    // GET /progressos?desafioId= devolve a participacao do usuario logado (404 se nao participa)
+    public Participacao buscarPorDesafio(Long desafioId) {
         try {
-            super.executarUpdate(
-                    sql,
-                    participacao.getUsuarioId(),
-                    participacao.getDesafioId());
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao inserir participacao.", e);
+            HttpResponse<String> response = this.api.get("/progressos?desafioId=" + desafioId);
+            if (response.statusCode() == 200) {
+                JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
+                return this.gson.fromJson(json.get("participacao"), Participacao.class);
+            }
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar participacao na API.", e);
+        }
+    }
+
+    public boolean inserir(Long desafioId) {
+        try {
+            String jsonEnvio = this.gson.toJson(Map.of("desafio_id", desafioId));
+            HttpResponse<String> response = this.api.post("/participacoes", jsonEnvio);
+            return response.statusCode() == 201;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao participar do desafio na API.", e);
         }
     }
 }

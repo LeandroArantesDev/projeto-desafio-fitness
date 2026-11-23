@@ -1,6 +1,5 @@
 package com.fitness.controller;
 
-import com.fitness.model.Desafio;
 import com.fitness.model.Participacao;
 import com.fitness.model.Progresso;
 import com.fitness.model.Usuario;
@@ -14,7 +13,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
+/**
+ * Controller de Progresso.
+ * Ponte entre rota, service e view — sem regra de negocio.
+ */
 @WebServlet("/progresso")
 public class ProgressoServlet extends BaseServlet {
 
@@ -29,25 +33,27 @@ public class ProgressoServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        Usuario usuarioLogado = this.usuarioLogado(req);
-        Long desafioId = this.paramLong(req, "desafioId");
-
-        Participacao participacao = this.participacaoService.buscarPorUsuarioEDesafio(
-                usuarioLogado.getId(), desafioId);
-
-        if (participacao == null) {
+        if (!this.carregarTela(req, this.paramLong(req, "desafioId"))) {
             this.redirect(req, resp, "/desafios");
             return;
         }
-
-        Desafio desafio = this.desafioService.buscarPorId(desafioId);
-
-        req.setAttribute("desafio", desafio);
-        req.setAttribute("historico", this.progressoService.listarPorParticipacao(participacao.getId()));
-        req.setAttribute("totalRegistrado", this.progressoService.totalRegistrado(participacao.getId()));
-
-        req.setAttribute("participacao", participacao);
         this.forward(req, resp, FORM);
+    }
+
+    // coloca no request o desafio, a participacao e o historico do usuario logado
+    private boolean carregarTela(HttpServletRequest req, Long desafioId) {
+        Participacao participacao = this.participacaoService.buscarPorDesafio(desafioId);
+        if (participacao == null) {
+            return false;
+        }
+
+        List<Progresso> historico = this.progressoService.listarPorDesafio(desafioId);
+
+        req.setAttribute("desafio", this.desafioService.buscarPorId(desafioId));
+        req.setAttribute("participacao", participacao);
+        req.setAttribute("historico", historico);
+        req.setAttribute("totalRegistrado", this.progressoService.totalRegistrado(historico));
+        return true;
     }
 
     private Usuario usuarioLogado(HttpServletRequest req) {
@@ -66,17 +72,12 @@ public class ProgressoServlet extends BaseServlet {
             this.progressoService.registrar(progresso);
             req.setAttribute("sucesso", "Progresso registrado com sucesso.");
             Usuario usuarioLogado = this.usuarioLogado(req);
-            req.setAttribute("desafiosParticipando", this.desafioService.listarParticipando(usuarioLogado.getId()));
+            req.setAttribute("desafiosParticipando", this.desafioService.listarParticipando());
             req.setAttribute("desafiosCriados", this.desafioService.listarCriadosPor(usuarioLogado.getId()));
             this.forward(req, resp, LISTA_DESAFIOS);
         } catch (IllegalArgumentException e) {
-            Participacao participacao = this.participacaoService.buscarPorId(progresso.getParticipacaoId());
-
             req.setAttribute("erro", e.getMessage());
-            req.setAttribute("participacao", participacao);
-            req.setAttribute("desafio", this.desafioService.buscarPorId(participacao.getDesafioId()));
-            req.setAttribute("historico", this.progressoService.listarPorParticipacao(participacao.getId()));
-            req.setAttribute("totalRegistrado", this.progressoService.totalRegistrado(participacao.getId()));
+            this.carregarTela(req, this.paramLong(req, "desafioId"));
             this.forward(req, resp, FORM);
         }
     }

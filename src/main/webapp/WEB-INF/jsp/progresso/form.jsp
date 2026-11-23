@@ -58,6 +58,7 @@
 
                 <form method="post" action="${pageContext.request.contextPath}/progresso">
                     <input type="hidden" name="participacaoId" value="${participacao.id}">
+                    <input type="hidden" name="desafioId" value="${desafio.id}">
 
                     <div class="form-group">
                         <label for="valorRegistrado">Valor registrado</label>

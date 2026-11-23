@@ -9,7 +9,7 @@ import java.util.List;
  * SERVICE de Desafio — regras de negocio ficam aqui.
  *
  * Controller so chama estes metodos e decide a view.
- * DAO so executa SQL.
+ * DAO so chama a API.
  */
 public class DesafioService {
 
@@ -23,12 +23,18 @@ public class DesafioService {
         return this.desafioDAO.listarTodosDesafios();
     }
 
+    // a API devolve todos os desafios; aqui filtra os criados pelo usuario
     public List<Desafio> listarCriadosPor(Long usuarioId) {
-        return this.desafioDAO.listarPorCriador(usuarioId);
+        return this.listar().stream()
+                .filter(d -> usuarioId != null && usuarioId.equals(d.getCriadorId()))
+                .toList();
     }
 
-    public List<Desafio> listarParticipando(Long usuarioId) {
-        return this.desafioDAO.listarPorParticipante(usuarioId);
+    // a API ja marca "participando" para o usuario do token
+    public List<Desafio> listarParticipando() {
+        return this.listar().stream()
+                .filter(Desafio::isParticipando)
+                .toList();
     }
 
     public Desafio buscarPorId(Long id) {
@@ -49,14 +55,18 @@ public class DesafioService {
         this.validarCamposObrigatorios(desafio);
 
         if (desafio.getId() == null) {
-            this.desafioDAO.inserir(desafio);
+            if (!this.desafioDAO.inserir(desafio)) {
+                throw new IllegalArgumentException("Erro ao cadastrar desafio.");
+            }
             return;
         }
 
         if (this.desafioDAO.buscarPorId(desafio.getId()) == null) {
             throw new IllegalArgumentException("Desafio nao encontrado para alteracao.");
         }
-        this.desafioDAO.alterar(desafio);
+        if (!this.desafioDAO.alterar(desafio)) {
+            throw new IllegalArgumentException("Erro ao alterar desafio.");
+        }
     }
 
     /**
@@ -71,7 +81,9 @@ public class DesafioService {
         if (this.desafioDAO.buscarPorId(id) == null) {
             throw new IllegalArgumentException("Desafio nao encontrado.");
         }
-        this.desafioDAO.deletar(id);
+        if (!this.desafioDAO.deletar(id)) {
+            throw new IllegalArgumentException("Erro ao excluir desafio.");
+        }
     }
 
     private void prepararDados(Desafio desafio) {
