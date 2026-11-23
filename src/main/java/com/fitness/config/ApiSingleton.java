@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public class ApiSingleton {
 
-    private static final String BASE_URL = "http://localhost:8080/api";
+    private static final String BASE_URL = "http://host.docker.internal:8080/projeto-desafio-fitness/api";
 
     private static ApiSingleton instance;
     private final HttpClient client;
