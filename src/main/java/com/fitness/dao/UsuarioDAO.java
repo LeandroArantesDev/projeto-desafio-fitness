@@ -45,7 +45,7 @@ public class UsuarioDAO extends ApiDAO {
 
     public boolean registrar(String nome, String email, String senha) {
         try {
-            String jsonEnvio = this.gson.toJson(Map.of("nome", nome, "email", email, "senha", senha));
+            String jsonEnvio = this.gson.toJson(Map.of("nome", nome, "email", email, "senha_hash", senha));
             HttpResponse<String> response = this.api.post("/register", jsonEnvio);
             return response.statusCode() == 201 || response.statusCode() == 200;
         } catch (Exception e) {
