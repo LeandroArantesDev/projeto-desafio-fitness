@@ -9,6 +9,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
@@ -24,9 +25,15 @@ public class AuthFilter implements Filter {
         HttpSession session = req.getSession(false);
 
         Usuario usuarioLogado = (session != null) ? (Usuario) session.getAttribute("usuarioLogado") : null;
-        if (usuarioLogado != null && usuarioLogado.getToken() != null) {
-            ApiSingleton.setToken(usuarioLogado.getToken());
+        if (usuarioLogado == null || usuarioLogado.getToken() == null) {
+            ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/login");
+            return;
         }
+        if (req.getServletPath().startsWith("/usuarios") && !"admin".equals(usuarioLogado.getTipo())) {
+            ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
+        ApiSingleton.setToken(usuarioLogado.getToken());
         try {
             chain.doFilter(request, response);
         } finally {
